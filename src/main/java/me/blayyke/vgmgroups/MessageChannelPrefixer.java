@@ -21,13 +21,14 @@ public class MessageChannelPrefixer implements MessageChannel {
 
     @Override
     public Optional<Text> transformMessage(@Nullable Object sender, MessageReceiver recipient, Text original, ChatType type) {
+        if (sender == null) return Optional.ofNullable(original);
         Player player = (Player) sender;
         Optional<Group> playerGroup = GroupManager.getInstance().getPlayerGroup(player);
         if (!playerGroup.isPresent()) return Optional.of(original);
         Group group = playerGroup.get();
 
         Text text = Text.builder()
-                .append(Text.of(TextColors.GREEN, "[" + group.getRank(player).getRank().getChatPrefix()))
+                .append(Text.of(TextColors.GREEN, "[" + group.getRank(player.getUniqueId()).getRank().getChatPrefix()))
                 .append(Text.of(TextColors.GREEN, group.getName() + "] "))
                 .append(original)
                 .toText();
