@@ -48,6 +48,9 @@ public class Group {
 
         this.land = land;
         this.home = home;
+
+        removeRankIfPresent(ownerUUID);
+        ranks.add(new GroupRank(this, ownerUUID, Rank.OWNER));
     }
 
     public UUID getUUID() {
@@ -95,13 +98,12 @@ public class Group {
     }
 
     public void setRank(Player target, Rank rank) {
-        removeRankIfPresent(target);
+        removeRankIfPresent(target.getUniqueId());
         ranks.add(new GroupRank(this, target.getUniqueId(), rank));
     }
 
-    private void removeRankIfPresent(Player target) {
-        Optional<GroupRank> prevRank = getRank(target);
-        prevRank.ifPresent(rank -> ranks.remove(rank));
+    private void removeRankIfPresent(UUID target) {
+        ranks.remove(getRank(target));
     }
 
     public void setRelationshipWith(Group target, Relationship relationship) {
@@ -109,8 +111,8 @@ public class Group {
         relationships.add(new GroupRelationship(this, target, relationship));
     }
 
-    public Optional<GroupRank> getRank(Player target) {
-        return ranks.stream().filter(rank -> rank.getMemberUUID().equals(target.getUniqueId())).findFirst();
+    public GroupRank getRank(UUID target) {
+        return ranks.stream().filter(rank -> rank.getMemberUUID().equals(target)).findFirst().orElseThrow(() -> new IllegalStateException("no rank found"));
     }
 
     public Optional<GroupRelationship> getRelationshipWith(Group target) {
