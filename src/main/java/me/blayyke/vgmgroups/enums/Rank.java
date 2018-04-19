@@ -3,7 +3,10 @@ package me.blayyke.vgmgroups.enums;
 import java.util.Arrays;
 
 public enum Rank {
-    OFFICER("Officer", "*"), MEMBER("Member", "+"), RECRUIT("Recruit", "-");
+    OWNER("Owner", "**"),
+    OFFICER("Officer", "*"),
+    MEMBER("Member", "+"),
+    RECRUIT("Recruit", "-");
 
     private final String friendlyName;
     private final String chatPrefix;
