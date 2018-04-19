@@ -18,21 +18,21 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupInvite extends Command {
-    public CommandChildGroupInvite(VGMGroups plugin) {
-        super(plugin, Lists.newArrayList("invite", "add"), Text.of("Invite people to your group."));
+public class CommandChildGroupDescription extends Command {
+    public CommandChildGroupDescription(VGMGroups plugin) {
+        super(plugin, Lists.newArrayList("description", "desc", "d"), Text.of("Set the description for your group."));
     }
 
     @Nonnull
     @Override
     protected String getPermission() {
-        return "invite";
+        return "description";
     }
 
     @Override
     public Optional<CommandElement[]> getArguments() {
         return Optional.of(new CommandElement[]{
-                GenericArguments.onlyOne(GenericArguments.player(Text.of("player")))
+                GenericArguments.remainingJoinedStrings(Text.of("desc"))
         });
     }
 
@@ -43,12 +43,14 @@ public class CommandChildGroupInvite extends Command {
         if (!groupOpt.isPresent()) error(Text.of("You are not in a group!"));
         Group group = groupOpt.get();
 
-        final Player target = args.<Player>getOne("player")
+        final String desc = args.<String>getOne("desc")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
-        target.sendMessage(Text.of("You have been invited to " + group.getName() + " by " + player.getName() + "."));
-        group.addInvited(target);
-        player.sendMessage(Text.of(target.getName() + " has been invited to your group."));
+        group.setDescription(desc);
+
+        player.sendMessage(Text.builder()
+                .append(Text.of(TextColors.GREEN, "Your group's description has been set to:"))
+                .append(Text.of(TextColors.GRAY, desc)).toText());
 
         return CommandResult.success();
     }

@@ -3,8 +3,8 @@ package me.blayyke.vgmgroups.serializer;
 import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.relationship.GroupRelationship;
-import me.blayyke.vgmgroups.relationship.Relationship;
+import me.blayyke.vgmgroups.GroupRelationship;
+import me.blayyke.vgmgroups.enums.Relationship;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
@@ -20,14 +20,17 @@ public class GroupRelationshipSerializer implements TypeSerializer<GroupRelation
         Relationship relationship = value.getNode("Relationship").getValue(TypeToken.of(Relationship.class));
 
         Optional<Group> optGroup = GroupManager.getInstance().getGroup(groupUUID);
-        Group group = optGroup.orElse(null);
+        Group group = optGroup.orElseThrow(() -> new IllegalStateException("group not found!"));
         Optional<Group> optTargetGroup = GroupManager.getInstance().getGroup(targetGroupUUID);
-        Group targetGroup = optTargetGroup.orElse(null);
+        Group targetGroup = optTargetGroup.orElseThrow(() -> new IllegalStateException("target group not found!"));
 
-        return new GroupRelationship(group,targetGroup, relationship);
+        return new GroupRelationship(group, targetGroup, relationship);
     }
 
     @Override
     public void serialize(TypeToken<?> type, GroupRelationship obj, ConfigurationNode value) throws ObjectMappingException {
+        value.getNode("Group").setValue(TypeToken.of(UUID.class), obj.getGroup().getUUID());
+        value.getNode("Target Group").setValue(TypeToken.of(UUID.class), obj.getTargetGroup().getUUID());
+        value.getNode("Relationship").setValue(TypeToken.of(Relationship.class), obj.getRelationship());
     }
 }

@@ -1,8 +1,12 @@
 package me.blayyke.vgmgroups.manager;
 
+import com.google.common.io.Files;
+import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.enums.Relationship;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.io.File;
@@ -13,20 +17,51 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class GroupManager {
+    private final String fileExtension = "vgroup";
+
     private static GroupManager instance;
-    private File groupsDir;
     private List<Group> groups;
 
     private GroupManager() {
-        loadGroups();
+    }
+
+    public void updateRelationship(Group group, Group targetGroup, Relationship relationship) {
+        group.setRelationshipWith(targetGroup, relationship);
+        targetGroup.setRelationshipWith(group, relationship);
     }
 
     public Optional<Group> getGroup(UUID uuid) {
         return groups.stream().filter(g -> g.getUUID().equals(uuid)).findFirst();
     }
 
-    void loadGroups() {
+    public Optional<Group> getGroup(String name) {
+        return groups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    public void loadGroups() throws IOException, ObjectMappingException {
+        System.out.println("Loading groups");
         groups = new ArrayList<>();
+        System.out.println("List init");
+        File[] files = DataManager.getInstance().getGroupsDir().listFiles();
+        System.out.println("ListFiles stored");
+        if (files == null) {
+            System.out.println("ListFiles null");
+            return;
+        }
+
+        for (File file : files) {
+            if (!Files.getFileExtension(file.getName()).equalsIgnoreCase(fileExtension)) {
+                System.out.println("File " + file.getName() + " does not match extension " + fileExtension + ". Continuing");
+                continue;
+            }
+
+            HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(file).build();
+            ConfigurationNode rootNode = loader.load();
+
+            Group group = rootNode.getValue(TypeToken.of(Group.class));
+            if (group == null) System.out.println("GROUP IS NULL!");
+            groups.add(group);
+        }
     }
 
     public List<Group> getGroups() {
@@ -41,20 +76,22 @@ public class GroupManager {
         return groups.stream().filter(group -> group.isInGroup(player)).findFirst();
     }
 
-    public void saveGroups() throws IOException {
+    public void saveGroups() throws IOException, ObjectMappingException {
+        for (Group group : groups) saveGroup(group);
+    }
+
+    private void saveGroup(Group group) throws IOException, ObjectMappingException {
         File groupsDir = DataManager.getInstance().getGroupsDir();
+        File groupFile = new File(groupsDir, group.getUUID().toString() + fileExtension);
+        groupFile.createNewFile();
 
-        for (Group group : groups) {
-            File groupFile = new File(groupsDir, group.getUUID().toString());
-            groupFile.createNewFile();
+        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
+        ConfigurationNode rootNode = loader.load();
 
-            HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setPath(groupFile.toPath()).build();
-            ConfigurationNode rootNode = loader.load();
+        System.out.println(group.toString());
 
-            rootNode.setValue(group);
-
-            loader.save(rootNode);
-        }
+        rootNode.setValue(TypeToken.of(Group.class), group);
+        loader.save(rootNode);
     }
 
     public static GroupManager getInstance() {
@@ -66,6 +103,11 @@ public class GroupManager {
         Group group = new Group(player.getUniqueId(), name);
         groups.add(group);
 
+        try {
+            saveGroup(group);
+        } catch (IOException | ObjectMappingException e) {
+            throw new RuntimeException("Failed to save group " + group.getName(), e);
+        }
         return group;
     }
 
@@ -76,5 +118,9 @@ public class GroupManager {
                 uuid = createNewUUID();
 
         return uuid;
+    }
+
+    public boolean isGroupNameTaken(String name) {
+        return groups.stream().anyMatch(g -> g.getName().equalsIgnoreCase(name));
     }
 }

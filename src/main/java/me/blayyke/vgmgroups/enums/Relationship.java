@@ -1,9 +1,9 @@
-package me.blayyke.vgmgroups.relationship;
+package me.blayyke.vgmgroups.enums;
 
 import java.util.Arrays;
 
 public enum Relationship {
-    ALLY("Truce"), ENEMY("Enemy"), TRUCE("Truce");
+    ALLY("Ally"), ENEMY("Enemy"), TRUCE("Truce"), NEUTRAL("Neutral");
 
     private String friendlyName;
 
@@ -12,7 +12,7 @@ public enum Relationship {
     }
 
     public static Relationship fromString(String relationship) {
-        return Arrays.stream(values()).filter(s -> s.friendlyName.equalsIgnoreCase(relationship)).findFirst().get();
+        return Arrays.stream(values()).filter(s -> s.friendlyName.equalsIgnoreCase(relationship)).findFirst().orElse(null);
     }
 
     public String getFriendlyName() {

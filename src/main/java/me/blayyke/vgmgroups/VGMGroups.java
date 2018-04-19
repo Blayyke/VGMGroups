@@ -1,19 +1,19 @@
 package me.blayyke.vgmgroups;
 
 import com.google.common.reflect.TypeToken;
-import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.command.groups.CommandGroup;
 import me.blayyke.vgmgroups.listener.DamageListener;
 import me.blayyke.vgmgroups.manager.ConfigManager;
 import me.blayyke.vgmgroups.manager.DataManager;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.relationship.GroupRelationship;
-import me.blayyke.vgmgroups.relationship.Relationship;
+import me.blayyke.vgmgroups.enums.Relationship;
+import me.blayyke.vgmgroups.serializer.ChunkLocationSerializer;
 import me.blayyke.vgmgroups.serializer.GroupRelationshipSerializer;
 import me.blayyke.vgmgroups.serializer.GroupSerializer;
 import me.blayyke.vgmgroups.serializer.RelationshipSerializer;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -51,29 +51,31 @@ public class VGMGroups {
     private Path path;
 
     @Listener
-    public void preInit(GamePreInitializationEvent event) throws IOException {
+    public void preInit(GamePreInitializationEvent event) throws IOException, ObjectMappingException {
         logger.info("GamePreInit");
+
+        registerTypeSerializers();
+
         ConfigManager.getInstance().setConfigPath(path);
         ConfigManager.getInstance().setLoader(loader);
         ConfigManager.getInstance().loadConfig();
 
+        GroupManager.getInstance().loadGroups();
         loadCommands();
 
         DataManager.getInstance().load();
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(Group.class), new GroupSerializer());
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(Relationship.class), new RelationshipSerializer());
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GroupRelationship.class), new GroupRelationshipSerializer());
-
         Sponge.getEventManager().registerListeners(this, new DamageListener());
     }
 
-    private void loadCommands() {
-        loadCommand(new CommandGroup());
+    private void registerTypeSerializers() {
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(Group.class), new GroupSerializer());
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(Relationship.class), new RelationshipSerializer());
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GroupRelationship.class), new GroupRelationshipSerializer());
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ChunkLocation.class), new ChunkLocationSerializer());
     }
 
-    private void loadCommand(Command command) {
-        Sponge.getCommandManager().register(this, command.getSpec(), command.getAliases());
-        logger.info("Registered command " + command.getAliases());
+    private void loadCommands() {
+        new CommandGroup(this).register();
     }
 
     @Listener
@@ -106,12 +108,13 @@ public class VGMGroups {
         Location<World> location = player.getLocation();
         Optional<Chunk> chunkOpt = location.getExtent().getChunk(location.getChunkPosition());
         if (!chunkOpt.isPresent()) return;
-        Chunk chunk = chunkOpt.get();
+        //// TODO: 19/04/2018  
+//        Chunk chunk = chunkOpt.get();
 //        chunk.loca
     }
 
     @Listener
-    public void serverStop(GameStoppingServerEvent event) throws IOException {
+    public void serverStop(GameStoppingServerEvent event) throws IOException, ObjectMappingException {
         GroupManager.getInstance().saveGroups();
     }
 

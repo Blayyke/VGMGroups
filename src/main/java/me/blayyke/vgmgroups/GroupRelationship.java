@@ -1,6 +1,6 @@
-package me.blayyke.vgmgroups.relationship;
+package me.blayyke.vgmgroups;
 
-import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.enums.Relationship;
 
 public class GroupRelationship {
     private Group group;

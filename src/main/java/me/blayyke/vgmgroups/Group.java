@@ -2,17 +2,16 @@ package me.blayyke.vgmgroups;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.google.common.collect.Lists;
+import me.blayyke.vgmgroups.enums.Rank;
+import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.relationship.GroupRelationship;
-import me.blayyke.vgmgroups.relationship.Relationship;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class Group {
     private final UUID uuid;
@@ -25,15 +24,16 @@ public class Group {
     private String description;
 
     private List<GroupRelationship> relationships;
+    private List<GroupRank> ranks;
 
     private List<ChunkLocation> land;
     private Vector3d home;
 
     public Group(UUID ownerUUID, String name) {
-        this(GroupManager.getInstance().createNewUUID(), ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>());
+        this(GroupManager.getInstance().createNewUUID(), ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>());
     }
 
-    public Group(UUID uuid, UUID ownerUUID, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<ChunkLocation> land, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs) {
+    public Group(UUID uuid, UUID ownerUUID, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<GroupRank> ranks, List<ChunkLocation> land, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs) {
         this.uuid = uuid;
         this.ownerUUID = ownerUUID;
         this.homeWorldUUID = homeWorldUUID;
@@ -44,6 +44,7 @@ public class Group {
         this.description = description;
 
         this.relationships = relationships;
+        this.ranks = ranks;
 
         this.land = land;
         this.home = home;
@@ -73,6 +74,10 @@ public class Group {
         return relationships;
     }
 
+    public List<GroupRank> getRanks() {
+        return ranks;
+    }
+
     public List<ChunkLocation> getLand() {
         return land;
     }
@@ -89,12 +94,26 @@ public class Group {
         return Sponge.getServer().getWorld(getHomeWorldUUID());
     }
 
-    private void setRelationship(Group target, Relationship relationship) {
+    public void setRank(Player target, Rank rank) {
+        removeRankIfPresent(target);
+        ranks.add(new GroupRank(this, target.getUniqueId(), rank));
+    }
+
+    private void removeRankIfPresent(Player target) {
+        Optional<GroupRank> prevRank = getRank(target);
+        prevRank.ifPresent(rank -> ranks.remove(rank));
+    }
+
+    public void setRelationshipWith(Group target, Relationship relationship) {
         removeRelationshipIfPresent(target);
         relationships.add(new GroupRelationship(this, target, relationship));
     }
 
-    private Optional<GroupRelationship> getRelationshipWith(Group target) {
+    public Optional<GroupRank> getRank(Player target) {
+        return ranks.stream().filter(rank -> rank.getMemberUUID().equals(target.getUniqueId())).findFirst();
+    }
+
+    public Optional<GroupRelationship> getRelationshipWith(Group target) {
         return relationships.stream().filter(groupRelationship -> groupRelationship.getTargetGroup().equals(target)).findFirst();
     }
 
@@ -128,5 +147,49 @@ public class Group {
 
     public List<UUID> getInvitedUUIDs() {
         return invitedUUIDs;
+    }
+
+    public List<Player> getMembers() {
+        ListIterator<UUID> it = memberUUIDs.listIterator();
+        ArrayList<Player> players = new ArrayList<>();
+        while (it.hasNext()) {
+            UUID uuid = it.next();
+            Optional<Player> player = Sponge.getServer().getPlayer(uuid);
+            if (!player.isPresent()) {
+                System.err.println("Player not found for UUID " + uuid + "! This should never happen.");
+                it.remove();
+                continue;
+            }
+            players.add(player.get());
+        }
+
+        return players;
+    }
+
+    public void setDescription(String desc) {
+        this.description = desc;
+    }
+
+    public void setName(String name) throws CommandException {
+        if (GroupManager.getInstance().isGroupNameTaken(name))
+            throw new CommandException(Text.of("That name is already taken by another group!"));
+        this.name = name;
+    }
+
+    public void setOwner(UUID ownerUUID) {
+        this.ownerUUID = ownerUUID;
+    }
+
+    public Player getOwner() {
+        Optional<Player> playerOpt = Sponge.getServer().getPlayer(getOwnerUUID());
+        return playerOpt.orElseThrow(() -> new RuntimeException("Could not find leader from UUID " + uuid + "!"));
+    }
+
+    public void playerJoin(Player player) {
+        memberUUIDs.add(player.getUniqueId());
+    }
+
+    public boolean isInvited(UUID uniqueId) {
+        return invitedUUIDs.contains(uniqueId);
     }
 }

@@ -18,35 +18,36 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupCreate extends Command {
-    public CommandChildGroupCreate(VGMGroups plugin) {
-        super(plugin, Lists.newArrayList("create"), Text.of("Create a group."));
-    }
-
-    @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{GenericArguments.string(Text.of("name"))});
+public class CommandChildGroupLeader extends Command {
+    public CommandChildGroupLeader(VGMGroups plugin) {
+        super(plugin, Lists.newArrayList("leader", "owner"), Text.of("Pass on ownership of your group."));
     }
 
     @Nonnull
     @Override
     protected String getPermission() {
-        return "create";
+        return "setleader";
+    }
+
+    @Override
+    public Optional<CommandElement[]> getArguments() {
+        return Optional.of(new CommandElement[]{
+                GenericArguments.onlyOne(GenericArguments.player(Text.of("player")))
+        });
     }
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
+        Optional<Group> groupOpt = GroupManager.getInstance().getPlayerGroup(player);
+        if (!groupOpt.isPresent()) error(Text.of("You are not in a group!"));
+        Group group = groupOpt.get();
 
-        GroupManager manager = GroupManager.getInstance();
-        Optional<Group> playerGroup = manager.getPlayerGroup(player);
-        if (playerGroup.isPresent())
-            throw new CommandException(Text.of(TextColors.RED, "You must leave your current group before you can create one!"));
+        final Player target = args.<Player>getOne("player")
+                .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
-        final String name = args.<String>getOne("name")
-                .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "argument missing")));
-        manager.createNewGroup(player, name);
-        player.sendMessage(Text.of(TextColors.GREEN, "Successfully created group " + name + "!"));
+        group.setOwner(target.getUniqueId());
+        player.sendMessage(Text.of(target.getName() + " has set you as the leader for your group."));
 
         return CommandResult.success();
     }

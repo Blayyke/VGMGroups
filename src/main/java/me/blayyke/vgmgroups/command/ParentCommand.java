@@ -1,24 +1,34 @@
 package me.blayyke.vgmgroups.command;
 
+import me.blayyke.vgmgroups.VGMGroups;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 
-import java.util.Collections;
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
 public abstract class ParentCommand extends Command {
     private Set<Command> children;
 
-    public ParentCommand(Text description, String permission, List<String> aliases) {
-        super(description, permission, aliases);
+    ParentCommand(@Nonnull final VGMGroups plugin,
+                  @Nonnull final List<String> aliases,
+                  @Nonnull final Text description) {
+        super(plugin, aliases, description);
+
+        this.children = null;
     }
 
-    protected Set<Command> registerChildren() {
-        return Collections.emptySet();
-    }
-
-    public Set<Command> getChildren() {
-        if (this.children == null) this.children = this.registerChildren();
+    @Nonnull
+    Set<Command> getChildren() {
+        if (this.children == null) this.children = registerChildren();
         return this.children;
+    }
+
+    @Nonnull
+    protected abstract Set<Command> registerChildren();
+
+    public void register() {
+        Sponge.getCommandManager().register(this.getPlugin(), this.getCommandSpec(), this.getAliases());
     }
 }
