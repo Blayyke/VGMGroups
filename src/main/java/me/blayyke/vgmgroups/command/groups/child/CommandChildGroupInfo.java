@@ -14,13 +14,11 @@ import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
-import java.util.UUID;
 
 public class CommandChildGroupInfo extends Command {
     public CommandChildGroupInfo(VGMGroups plugin) {
@@ -44,7 +42,7 @@ public class CommandChildGroupInfo extends Command {
         Optional<String> nameOpt = args.getOne("name");
         if (nameOpt.isPresent()) {
             String name = nameOpt.get();
-            Optional<Group> groupOpt = GroupManager.getInstance().getGroup(name);
+            Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
             if (groupOpt.isPresent()) {
                 sendGroupInfo(player, groupOpt.get());
                 return CommandResult.success();
@@ -53,7 +51,7 @@ public class CommandChildGroupInfo extends Command {
             Optional<Player> targetOpt = Sponge.getServer().getPlayer(nameOpt.get());
             if (targetOpt.isPresent()) {
                 Player target = targetOpt.get();
-                Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroup(target.getUniqueId());
+                Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroupByUUID(target.getUniqueId());
                 if (targetGroupOpt.isPresent()) {
                     Group targetGroup = targetGroupOpt.get();
                     sendGroupInfo(player, targetGroup);
@@ -79,6 +77,7 @@ public class CommandChildGroupInfo extends Command {
 
         StringBuilder memberStrBuilder = new StringBuilder();
         for (Player member : group.getMembers()) {
+            memberStrBuilder.append(group.getRank(member.getUniqueId()).getRank().getChatPrefix());
             memberStrBuilder.append(member.getName()).append(", ");
         }
 
@@ -95,10 +94,10 @@ public class CommandChildGroupInfo extends Command {
 
                 .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Owner: "))
                 .append(Text.of(TextColors.GRAY, TextStyles.NONE, group.getOwner().getName()))
+                .append(newline)
 
                 .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members: "))
                 .append(Text.of(TextColors.GRAY, TextStyles.NONE, memberStr))
-                .append(newline)
                 .build();
 
         player.sendMessage(text);
