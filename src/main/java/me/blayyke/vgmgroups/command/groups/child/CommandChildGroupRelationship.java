@@ -40,9 +40,7 @@ public class CommandChildGroupRelationship extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
-        Optional<Group> playerGroupOpt = GroupManager.getInstance().getPlayerGroup(player);
-        if (!playerGroupOpt.isPresent()) error(Text.of("You are not in a group!"));
-        Group playerGroup = playerGroupOpt.get();
+        Group group = requireGroup(player);
 
         String name = args.<String>getOne("name").orElseThrow(() -> new CommandException(Text.of("name argument not present!")));
         Optional<String> relationshipOpt = args.getOne("relationship");
@@ -72,15 +70,15 @@ public class CommandChildGroupRelationship extends Command {
 
                 error(Text.of("Invalid relationship setting. Valid settings are: " + relationshipStr.substring(0, relationshipStr.length() - 2)));
             }
-            playerGroup.setRelationshipWith(target, relationship);
+            group.setRelationshipWith(target, relationship);
             player.sendMessage(Text.of("Your relationship with " + target.getName() + " is now " + relationship.getFriendlyName() + "."));
             return CommandResult.success();
         }
 
-        if (target.equals(playerGroup)) throw new CommandException(Text.of("You cannot set the relationship with yourself."));
+        if (target.equals(group)) throw new CommandException(Text.of("You cannot set the relationship with yourself."));
 
         //view current one
-        Optional<GroupRelationship> relationshipWith = playerGroup.getRelationshipWith(target);
+        Optional<GroupRelationship> relationshipWith = group.getRelationshipWith(target);
         Relationship relationship;
         if (!relationshipWith.isPresent()) relationship = Relationship.NEUTRAL;
         else relationship = relationshipWith.get().getRelationship();

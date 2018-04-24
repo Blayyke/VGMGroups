@@ -32,14 +32,10 @@ public class CommandChildGroupDisband extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
-
-        GroupManager manager = GroupManager.getInstance();
-        Optional<Group> playerGroup = manager.getPlayerGroup(player);
-        if (!playerGroup.isPresent())
-            throw new CommandException(Text.of(TextColors.RED, "You are not in a group!"));
+        Group group = requireGroup(player);
 
         player.sendMessage(Text.of(TextColors.RED, "Your group has been deleted"));
-        GroupManager.getInstance().deleteGroup(playerGroup.get());
+        GroupManager.getInstance().deleteGroup(group);
 
         return CommandResult.success();
     }

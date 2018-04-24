@@ -67,8 +67,7 @@ public class CommandChildGroupInfo extends Command {
             return CommandResult.empty();
         }
 
-        Optional<Group> groupOpt = GroupManager.getInstance().getPlayerGroup(player);
-        Group group = groupOpt.orElseThrow(() -> new CommandException(Text.of("You are not in a group!")));
+        Group group = requireGroup(player);
         player.sendMessage(getGroupInfo(group));
         return CommandResult.success();
     }

@@ -39,9 +39,7 @@ public class CommandChildGroupLeader extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
-        Optional<Group> groupOpt = GroupManager.getInstance().getPlayerGroup(player);
-        if (!groupOpt.isPresent()) error(Text.of("You are not in a group!"));
-        Group group = groupOpt.get();
+        Group group = requireGroup(player);
 
         final Player target = args.<Player>getOne("player")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));

@@ -39,12 +39,10 @@ public class CommandChildGroupRank extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
-        Optional<Group> playerGroupOpt = GroupManager.getInstance().getPlayerGroup(player);
-        if (!playerGroupOpt.isPresent()) error(Text.of("You are not in a group!"));
-        Group playerGroup = playerGroupOpt.get();
+        Group group = requireGroup(player);
 
         Player target = args.<Player>getOne("name").orElseThrow(() -> new CommandException(Text.of("target argument not present!")));
-        if (target.getUniqueId().equals(playerGroup.getOwnerUUID()))
+        if (target.getUniqueId().equals(group.getOwnerUUID()))
             throw new CommandException(Text.of("Cannot change rank for owner. Use /group leader <leader>"));
 
         Optional<String> rankOpt = args.getOne("rank");
@@ -58,13 +56,13 @@ public class CommandChildGroupRank extends Command {
 
                 error(Text.of("Invalid rank setting. Valid settings are: " + rankStr.substring(0, rankStr.length() - 2)));
             }
-            playerGroup.setRank(target.getUniqueId(), rank);
+            group.setRank(target.getUniqueId(), rank);
             player.sendMessage(Text.of(target.getName() + "'s rank is now " + rank.getFriendlyName() + "."));
             return CommandResult.success();
         }
 
         //view current rank
-        GroupRank targetRank = playerGroup.getRank(target.getUniqueId());
+        GroupRank targetRank = group.getRank(target.getUniqueId());
 
         player.sendMessage(Text.of(target.getName() + "'s rank is now " + targetRank.getRank().getFriendlyName() + "."));
         return CommandResult.success();
