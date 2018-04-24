@@ -5,6 +5,7 @@ import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -46,8 +47,9 @@ public class CommandChildGroupCreate extends Command {
         final String name = args.<String>getOne("name")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "argument missing")));
         manager.createNewGroup(player, name);
-        player.sendMessage(Text.of(TextColors.GREEN, "Successfully created group " + name + "!"));
 
+        player.sendMessage(Text.of(TextColors.GREEN, "Successfully created group " + name + "! Set your description with /group desc <desc>"));
+        Sponge.getServer().getBroadcastChannel().send(Text.of(TextColors.GRAY, player.getName() + " created the group " + name + "."));
         return CommandResult.success();
     }
 }
