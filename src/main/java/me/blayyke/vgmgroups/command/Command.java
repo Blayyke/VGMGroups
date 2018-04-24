@@ -24,6 +24,8 @@ public abstract class Command implements CommandExecutor {
     protected Command(@Nonnull final VGMGroups plugin,
                       @Nonnull final List<String> aliases,
                       @Nonnull final Text description) {
+        if (aliases.isEmpty()) throw new IllegalArgumentException("aliases may not be empty");
+
         this.plugin = plugin;
         this.aliases = aliases;
         this.description = description;
