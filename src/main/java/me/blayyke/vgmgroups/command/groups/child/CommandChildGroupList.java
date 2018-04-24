@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CommandChildGroupList extends Command {
     public CommandChildGroupList(@Nonnull VGMGroups plugin) {
-        super(plugin, Lists.newArrayList(), Text.of("View a list of all the factions on the server"));
+        super(plugin, Lists.newArrayList("list"), Text.of("View a list of all the factions on the server"));
     }
 
     @Nonnull
@@ -28,7 +28,7 @@ public class CommandChildGroupList extends Command {
     }
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult execute(CommandSource src, CommandContext args) {
         List<Group> groups = GroupManager.getInstance().getGroups();
         PaginationList.Builder builder = PaginationList.builder();
 
