@@ -203,6 +203,8 @@ public class Group {
     }
 
     public void setOwner(UUID ownerUUID) {
+        setRank(this.ownerUUID, Rank.RECRUIT); // set the old owner to Recruit.
+        setRank(ownerUUID, Rank.OWNER);
         this.ownerUUID = ownerUUID;
     }
 
