@@ -5,12 +5,13 @@ import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -33,18 +34,14 @@ public class CommandChildGroupList extends Command {
         PaginationList.Builder builder = PaginationList.builder();
 
         List<Text> contents = new ArrayList<>();
-        contents.add(Text.of("Item 1"));
-        contents.add(Text.of("Item 2"));
-        contents.add(Text.of("Item 3"));
-
-        int pageNum = 0;
         for (int i = 0; i < groups.size(); i++) {
-            if (i % 10 == 0) pageNum++;
-
-            contents.add(pageNum, Text.of(""));
+            Group group = groups.get(i);
+            contents.add(Text.builder().onHover(TextActions.showText(CommandChildGroupInfo.getGroupInfo(group))).append(
+                    Text.of(TextColors.GREEN, group.getName()),
+                    Text.of(TextColors.GRAY, " " + group.getOnlineMembers().size() + "/" + group.getMemberUUIDs().size() + " online")).build());
         }
 
-        builder.header(Text.of("Groups")).contents(contents).sendTo(src);
-        return null;
+        builder.title(Text.of(TextColors.GREEN, "Groups")).padding(Text.of("-")).contents(contents).sendTo(src);
+        return CommandResult.success();
     }
 }
