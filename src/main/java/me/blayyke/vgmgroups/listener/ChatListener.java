@@ -1,6 +1,6 @@
 package me.blayyke.vgmgroups.listener;
 
-import me.blayyke.vgmgroups.MessageChannelPrefixer;
+import me.blayyke.vgmgroups.channel.MessageChannelPrefixer;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
