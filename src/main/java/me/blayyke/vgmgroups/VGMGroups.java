@@ -51,8 +51,6 @@ public class VGMGroups {
 
     @Listener
     public void preInit(GamePreInitializationEvent event) throws IOException, ObjectMappingException {
-        logger.info("GamePreInit");
-
         registerTypeSerializers();
 
         ConfigManager.getInstance().setConfigPath(path);
@@ -88,27 +86,22 @@ public class VGMGroups {
 
     @Listener
     public void init(GameInitializationEvent event) {
-        logger.info("GameInit");
     }
 
     @Listener
     public void postInit(GamePostInitializationEvent event) {
-        logger.info("GameInit");
     }
 
     @Listener
     public void serverAboutToStart(GameAboutToStartServerEvent event) {
-        logger.info("ServerAboutToStart");
     }
 
     @Listener
     public void serverStarting(GameStartingServerEvent event) {
-        logger.info("ServerStarting");
     }
 
     @Listener
     public void serverStart(GameStartedServerEvent event) {
-        logger.info("ServerStart");
     }
 
     @Listener
