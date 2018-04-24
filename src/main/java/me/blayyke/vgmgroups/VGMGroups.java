@@ -6,6 +6,8 @@ import me.blayyke.vgmgroups.enums.Rank;
 import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.listener.ChatListener;
 import me.blayyke.vgmgroups.listener.DamageListener;
+import me.blayyke.vgmgroups.listener.LandEditListener;
+import me.blayyke.vgmgroups.listener.MoveListener;
 import me.blayyke.vgmgroups.manager.ConfigManager;
 import me.blayyke.vgmgroups.manager.DataManager;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -65,8 +67,12 @@ public class VGMGroups {
     }
 
     private void registerListeners() {
+        logger.info("Registering listeners");
         Sponge.getEventManager().registerListeners(this, new ChatListener());
         Sponge.getEventManager().registerListeners(this, new DamageListener());
+        Sponge.getEventManager().registerListeners(this, new LandEditListener());
+        Sponge.getEventManager().registerListeners(this, new MoveListener());
+        logger.info("Registered listeners");
     }
 
     private void registerTypeSerializers() {

@@ -1,6 +1,7 @@
 package me.blayyke.vgmgroups;
 
 import com.flowpowered.math.vector.Vector3d;
+import com.flowpowered.math.vector.Vector3i;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.enums.Rank;
@@ -238,5 +239,9 @@ public class Group {
 
     public void removeInvited(UUID uniqueId) {
         invitedUUIDs.remove(uniqueId);
+    }
+
+    public boolean ownsChunk(Vector3i chunkPosition) {
+        return getClaims().stream().anyMatch(groupClaim -> groupClaim.getChunkX() == chunkPosition.getX() && groupClaim.getChunkZ() == chunkPosition.getY());
     }
 }
