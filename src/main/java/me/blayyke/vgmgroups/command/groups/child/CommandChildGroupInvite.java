@@ -46,9 +46,9 @@ public class CommandChildGroupInvite extends Command {
         final Player target = args.<Player>getOne("player")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
-        target.sendMessage(Text.of("You have been invited to " + group.getName() + " by " + player.getName() + "."));
+        group.broadcastMessage(Text.of(target.getName() + " has been invited to your group."));
         group.addInvited(target);
-        player.sendMessage(Text.of(target.getName() + " has been invited to your group."));
+        target.sendMessage(Text.of("You have been invited to " + group.getName() + " by " + player.getName() + "."));
 
         return CommandResult.success();
     }
