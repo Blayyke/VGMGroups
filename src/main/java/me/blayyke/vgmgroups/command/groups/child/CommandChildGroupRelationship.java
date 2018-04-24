@@ -1,4 +1,4 @@
-package me.blayyke.vgmgroups.command.groups.child.relationship;
+package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;

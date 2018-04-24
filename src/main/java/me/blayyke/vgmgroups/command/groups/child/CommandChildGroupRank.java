@@ -1,4 +1,4 @@
-package me.blayyke.vgmgroups.command.groups.child.relationship;
+package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
@@ -48,7 +48,6 @@ public class CommandChildGroupRank extends Command {
             throw new CommandException(Text.of("Cannot change rank for owner. Use /group leader <leader>"));
 
         Optional<String> rankOpt = args.getOne("rank");
-
         if (rankOpt.isPresent()) {
             //set new rank
             Rank rank = Rank.fromString(rankOpt.get());
