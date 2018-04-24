@@ -28,7 +28,7 @@ public class GroupRelationship {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof GroupRelationship)) return false;
-        GroupRelationship group = (GroupRelationship) obj;
-        return group.getGroup().equals(getGroup()) && group.getTargetGroup().equals(getTargetGroup()) && relationship == group.getRelationship();
+        GroupRelationship relationship = (GroupRelationship) obj;
+        return relationship.getGroup().equals(getGroup()) && relationship.getTargetGroup().equals(getTargetGroup()) && this.relationship == relationship.getRelationship();
     }
 }
