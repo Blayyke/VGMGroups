@@ -16,6 +16,6 @@ public class MessageChannelRelationship implements MessageChannel {
 
     @Override
     public Collection<MessageReceiver> getMembers() {
-        return new ArrayList<>(group.getMembers());
+        return new ArrayList<>(group.getOnlineMembers());
     }
 }
