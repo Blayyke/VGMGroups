@@ -2,8 +2,8 @@ package me.blayyke.vgmgroups.serializer;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.google.common.reflect.TypeToken;
-import me.blayyke.vgmgroups.ChunkLocation;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.GroupClaim;
 import me.blayyke.vgmgroups.GroupRank;
 import me.blayyke.vgmgroups.GroupRelationship;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -28,10 +28,10 @@ public class GroupSerializer implements TypeSerializer<Group> {
         List<GroupRelationship> relationships = value.getNode("Relationships").getList(TypeToken.of(GroupRelationship.class));
         List<GroupRank> ranks = value.getNode("Ranks").getList(TypeToken.of(GroupRank.class));
 
-        List<ChunkLocation> land = value.getNode("Land").getList(TypeToken.of(ChunkLocation.class));
+        List<GroupClaim> land = value.getNode("Land").getList(TypeToken.of(GroupClaim.class));
         Vector3d homeLocation = value.getNode("Home").getValue(TypeToken.of(Vector3d.class));
 
-        return new Group(groupUUID, ownerUUID, memberUUIDs, name, description, relationships, ranks, land, homeLocation, homeWorld, invitedUUIDs);
+        return new Group(ownerUUID, memberUUIDs, name, description, relationships, ranks, land, homeLocation, homeWorld, invitedUUIDs, groupUUID);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class GroupSerializer implements TypeSerializer<Group> {
         value.getNode("Ranks").setValue(new TypeToken<List<GroupRank>>() {
         }, group.getRanks());
 
-        value.getNode("Land").setValue(new TypeToken<List<ChunkLocation>>() {
-        }, group.getLand());
+        value.getNode("Land").setValue(new TypeToken<List<GroupClaim>>() {
+        }, group.getClaims());
         value.getNode("Home").setValue(TypeToken.of(Vector3d.class), group.getHome());
     }
 }
