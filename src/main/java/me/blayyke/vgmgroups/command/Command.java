@@ -1,6 +1,8 @@
 package me.blayyke.vgmgroups.command;
 
+import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
+import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandElement;
@@ -8,6 +10,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -34,6 +37,12 @@ public abstract class Command implements CommandExecutor {
     protected Player playersOnly(CommandSource src) throws CommandException {
         if (!(src instanceof Player)) throw new CommandException(Text.of("Only players can run this command!"));
         return (Player) src;
+    }
+
+    protected Group requireGroup(Player player) throws CommandException {
+        Optional<Group> playerGroup = GroupManager.getInstance().getPlayerGroup(player);
+        if (!playerGroup.isPresent()) error(Text.of(TextColors.RED, "You need to be in a group to use this command!"));
+        return playerGroup.get();
     }
 
     protected void error(Text text) throws CommandException {
