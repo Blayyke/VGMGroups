@@ -233,4 +233,8 @@ public class Group {
     public long getCreationTime() {
         return creationTime;
     }
+
+    public void removeInvited(UUID uniqueId) {
+        invitedUUIDs.remove(uniqueId);
+    }
 }
