@@ -7,8 +7,6 @@ import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.enums.Rank;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.GroupRelationship;
-import me.blayyke.vgmgroups.enums.Relationship;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -64,12 +62,9 @@ public class CommandChildGroupRank extends Command {
         }
 
         //view current rank
-        Optional<GroupRank> targetRank = playerGroup.getRank(target);
-        Rank rank;
-        if (!targetRank.isPresent()) rank = Rank.RECRUIT;
-        else rank = targetRank.get().getRank();
+        GroupRank targetRank = playerGroup.getRank(target.getUniqueId());
 
-        player.sendMessage(Text.of(target.getName()+ "'s rank is now " + rank.getFriendlyName() + "."));
+        player.sendMessage(Text.of(target.getName()+ "'s rank is now " + targetRank.getRank().getFriendlyName() + "."));
         return CommandResult.success();
     }
 }
