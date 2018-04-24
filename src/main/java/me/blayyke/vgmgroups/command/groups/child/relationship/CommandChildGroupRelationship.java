@@ -49,7 +49,7 @@ public class CommandChildGroupRelationship extends Command {
 
         Group target;
 
-        Optional<Group> groupOpt = GroupManager.getInstance().getGroup(name);
+        Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
         Optional<Player> targetPlayerOpt = Sponge.getServer().getPlayer(name);
         if (groupOpt.isPresent()) {
             target = groupOpt.get();
