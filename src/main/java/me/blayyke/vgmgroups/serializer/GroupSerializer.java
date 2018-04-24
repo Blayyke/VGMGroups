@@ -16,6 +16,8 @@ import java.util.UUID;
 public class GroupSerializer implements TypeSerializer<Group> {
     @Override
     public Group deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
+        long creationTime = value.getNode("Created At").getLong();
+
         UUID groupUUID = value.getNode("UUID").getValue(TypeToken.of(UUID.class));
         UUID ownerUUID = value.getNode("Owner UUID").getValue(TypeToken.of(UUID.class));
         UUID homeWorld = value.getNode("Home World").getValue(TypeToken.of(UUID.class));
@@ -31,11 +33,13 @@ public class GroupSerializer implements TypeSerializer<Group> {
         List<GroupClaim> land = value.getNode("Land").getList(TypeToken.of(GroupClaim.class));
         Vector3d homeLocation = value.getNode("Home").getValue(TypeToken.of(Vector3d.class));
 
-        return new Group(ownerUUID, memberUUIDs, name, description, relationships, ranks, land, homeLocation, homeWorld, invitedUUIDs, groupUUID);
+        return new Group(ownerUUID, creationTime, memberUUIDs, name, description, relationships, ranks, land, homeLocation, homeWorld, invitedUUIDs, groupUUID);
     }
 
     @Override
     public void serialize(TypeToken<?> type, Group group, ConfigurationNode value) throws ObjectMappingException {
+        value.getNode("Created At").setValue(group.getCreationTime());
+
         value.getNode("UUID").setValue(TypeToken.of(UUID.class), group.getUUID());
         value.getNode("Owner UUID").setValue(TypeToken.of(UUID.class), group.getOwnerUUID());
         value.getNode("Home World").setValue(TypeToken.of(UUID.class), group.getHomeWorldUUID());
