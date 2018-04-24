@@ -34,8 +34,7 @@ public class CommandChildGroupList extends Command {
         PaginationList.Builder builder = PaginationList.builder();
 
         List<Text> contents = new ArrayList<>();
-        for (int i = 0; i < groups.size(); i++) {
-            Group group = groups.get(i);
+        for (Group group : groups) {
             contents.add(Text.builder().onHover(TextActions.showText(CommandChildGroupInfo.getGroupInfo(group))).append(
                     Text.of(TextColors.GREEN, group.getName()),
                     Text.of(TextColors.GRAY, " " + group.getOnlineMembers().size() + "/" + group.getMemberUUIDs().size() + " online")).build());
