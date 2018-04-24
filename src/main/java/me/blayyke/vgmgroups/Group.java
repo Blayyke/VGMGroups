@@ -37,7 +37,7 @@ public class Group {
 
     public Group(UUID ownerUUID, String name) {
         this(ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(), GroupManager.getInstance().createNewUUID());
-        ranks.add(new GroupRank(this, ownerUUID, Rank.OWNER));
+        ranks.add(new GroupRank(ownerUUID, Rank.OWNER));
         System.out.println("Created new group " + name + ". Owner: " + ownerUUID);
     }
 
@@ -116,7 +116,7 @@ public class Group {
 
     public void setRank(UUID targetUUID, Rank rank) {
         removeRankIfPresent(targetUUID);
-        ranks.add(new GroupRank(this, targetUUID, rank));
+        ranks.add(new GroupRank(targetUUID, rank));
     }
 
     private void removeRankIfPresent(UUID target) {

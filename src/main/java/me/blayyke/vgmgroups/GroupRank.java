@@ -6,12 +6,10 @@ import org.spongepowered.api.entity.living.player.Player;
 import java.util.UUID;
 
 public class GroupRank {
-    private final Group group;
     private UUID playerUUID;
     private Rank rank;
 
-    public GroupRank(Group group, UUID playerUUID, Rank rank) {
-        this.group = group;
+    public GroupRank(UUID playerUUID, Rank rank) {
         this.playerUUID = playerUUID;
         this.rank = rank;
     }
@@ -22,9 +20,5 @@ public class GroupRank {
 
     public UUID getMemberUUID() {
         return playerUUID;
-    }
-
-    public Group getGroup() {
-        return group;
     }
 }
