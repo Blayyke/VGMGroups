@@ -9,14 +9,18 @@ import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.World;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Group {
     private final UUID uuid;
+    private final long creationTime;
     private UUID ownerUUID;
     private UUID homeWorldUUID;
     private List<UUID> memberUUIDs;
@@ -36,13 +40,14 @@ public class Group {
     private MessageChannel groupChat = () -> ImmutableSet.copyOf(Sponge.getGame().getServer().getOnlinePlayers());
 
     public Group(UUID ownerUUID, String name) {
-        this(ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(), GroupManager.getInstance().createNewUUID());
+        this(ownerUUID, System.currentTimeMillis(), Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(), GroupManager.getInstance().createNewUUID());
         ranks.add(new GroupRank(ownerUUID, Rank.OWNER));
         System.out.println("Created new group " + name + ". Owner: " + ownerUUID);
     }
 
-    public Group(UUID ownerUUID, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<GroupRank> ranks, List<GroupClaim> claims, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs, UUID uuid) {
+    public Group(UUID ownerUUID, long creationTime, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<GroupRank> ranks, List<GroupClaim> claims, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs, UUID uuid) {
         this.uuid = uuid;
+        this.creationTime = creationTime;
         this.ownerUUID = ownerUUID;
         this.homeWorldUUID = homeWorldUUID;
         this.memberUUIDs = memberUUIDs;
@@ -168,21 +173,23 @@ public class Group {
         return invitedUUIDs;
     }
 
-    public List<Player> getMembers() {
+    public List<User> getMembers() {
+        Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
+
         ListIterator<UUID> it = memberUUIDs.listIterator();
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
         while (it.hasNext()) {
             UUID uuid = it.next();
-            Optional<Player> player = Sponge.getServer().getPlayer(uuid);
-            if (!player.isPresent()) {
+            Optional<User> user = userStorage.get().get(uuid);
+            if (!user.isPresent()) {
                 System.err.println("Player not found for UUID " + uuid + "! This should never happen.");
                 it.remove();
                 continue;
             }
-            players.add(player.get());
+            users.add(user.get());
         }
 
-        return players;
+        return users;
     }
 
     public void setDescription(String desc) {
@@ -210,5 +217,20 @@ public class Group {
 
     public boolean isInvited(UUID uniqueId) {
         return invitedUUIDs.contains(uniqueId);
+    }
+
+    public List<Player> getOnlineMembers() {
+        List<User> collect = getMembers().stream().filter(User::isOnline).collect(Collectors.toList());
+        List<Player> players = new ArrayList<>(collect.size());
+        for (User user : collect) players.add(user.getPlayer().get());
+        return players;
+    }
+
+    public void broadcastMessage(Text text) {
+        for (Player player : getOnlineMembers()) player.sendMessage(text);
+    }
+
+    public long getCreationTime() {
+        return creationTime;
     }
 }
