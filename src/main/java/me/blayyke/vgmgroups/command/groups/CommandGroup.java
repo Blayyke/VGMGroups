@@ -5,8 +5,8 @@ import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.command.CommandContainer;
 import me.blayyke.vgmgroups.command.groups.child.*;
-import me.blayyke.vgmgroups.command.groups.child.relationship.CommandChildGroupRank;
-import me.blayyke.vgmgroups.command.groups.child.relationship.CommandChildGroupRelationship;
+import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupRank;
+import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupRelationship;
 import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nonnull;
@@ -22,6 +22,8 @@ public class CommandGroup extends CommandContainer {
     @Override
     protected Set<Command> registerChildren() {
         return Sets.newHashSet(
+                new CommandChildGroupChat(getPlugin()),
+                new CommandChildGroupClaim(getPlugin()),
                 new CommandChildGroupCreate(getPlugin()),
                 new CommandChildGroupDescription(getPlugin()),
                 new CommandChildGroupDisband(getPlugin()),
