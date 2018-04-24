@@ -14,9 +14,6 @@ import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.format.TextStyles;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -42,7 +39,7 @@ public class CommandChildGroupJoin extends Command {
         Player player = playersOnly(src);
         Optional<String> nameOpt = args.getOne("name");
         String name = nameOpt.orElseThrow(() -> new CommandException(Text.of("")));
-        Optional<Group> groupOpt = GroupManager.getInstance().getGroup(name);
+        Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
         if (groupOpt.isPresent()) {
             attemptJoinGroup(player, groupOpt.get());
             return CommandResult.success();
@@ -51,7 +48,7 @@ public class CommandChildGroupJoin extends Command {
         Optional<Player> targetOpt = Sponge.getServer().getPlayer(name);
         if (targetOpt.isPresent()) {
             Player target = targetOpt.get();
-            Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroup(target.getUniqueId());
+            Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroupByUUID(target.getUniqueId());
             if (targetGroupOpt.isPresent()) {
                 Group targetGroup = targetGroupOpt.get();
                 attemptJoinGroup(player, targetGroup);
