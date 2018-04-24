@@ -56,7 +56,7 @@ public class CommandChildGroupRank extends Command {
 
                 error(Text.of("Invalid rank setting. Valid settings are: " + rankStr.substring(0, rankStr.length() - 2)));
             }
-            playerGroup.setRank(target, rank);
+            playerGroup.setRank(target.getUniqueId(), rank);
             player.sendMessage(Text.of(target.getName() + "'s rank is now " + rank.getFriendlyName() + "."));
             return CommandResult.success();
         }
@@ -64,7 +64,7 @@ public class CommandChildGroupRank extends Command {
         //view current rank
         GroupRank targetRank = playerGroup.getRank(target.getUniqueId());
 
-        player.sendMessage(Text.of(target.getName()+ "'s rank is now " + targetRank.getRank().getFriendlyName() + "."));
+        player.sendMessage(Text.of(target.getName() + "'s rank is now " + targetRank.getRank().getFriendlyName() + "."));
         return CommandResult.success();
     }
 }
