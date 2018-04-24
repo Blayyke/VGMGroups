@@ -130,8 +130,4 @@ public class GroupManager {
     public Group getGroupForChunk(World world, Vector3i chunkPosition) {
         return groups.stream().filter(group -> group.ownsChunk(world, chunkPosition)).findFirst().orElse(null);
     }
-
-    public void isClaimed(Location<World> location) {
-
-    }
 }
