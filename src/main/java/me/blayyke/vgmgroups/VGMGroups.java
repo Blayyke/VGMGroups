@@ -62,7 +62,6 @@ public class VGMGroups {
         registerListeners();
 
         DataManager.getInstance().load();
-        GroupManager.getInstance().loadGroups();
     }
 
     private void registerListeners() {
@@ -103,7 +102,8 @@ public class VGMGroups {
     }
 
     @Listener
-    public void serverStarting(GameStartingServerEvent event) {
+    public void serverStarting(GameStartingServerEvent event) throws IOException, ObjectMappingException {
+        GroupManager.getInstance().loadGroups();
     }
 
     @Listener
