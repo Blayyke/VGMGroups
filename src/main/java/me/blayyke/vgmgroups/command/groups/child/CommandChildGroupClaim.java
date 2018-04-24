@@ -15,17 +15,16 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 public class CommandChildGroupClaim extends Command {
     public CommandChildGroupClaim(VGMGroups plugin) {
-        super(plugin, Lists.newArrayList("create"), Text.of("Create a group."));
+        super(plugin, Lists.newArrayList("claim"), Text.of("Claim a chunk."));
     }
 
     @Nonnull
     @Override
     protected String getPermission() {
-        return "create";
+        return "claim";
     }
 
     @Override
@@ -36,7 +35,7 @@ public class CommandChildGroupClaim extends Command {
         Group groupForChunk = GroupManager.getInstance().getGroupForChunk(location.getExtent(), location.getChunkPosition());
 
         if (groupForChunk == null) {
-            claimChunk(location);
+            group.claimChunk(location);
             return CommandResult.success();
         }
         if (group.equals(groupForChunk)) {
@@ -46,8 +45,5 @@ public class CommandChildGroupClaim extends Command {
 
         error(Text.of("This chunk is claimed by " + groupForChunk.getName() + "!"));
         return CommandResult.success();
-    }
-
-    private void claimChunk(Location<World> location) {
     }
 }
