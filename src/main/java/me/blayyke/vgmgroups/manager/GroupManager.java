@@ -30,11 +30,11 @@ public class GroupManager {
         targetGroup.setRelationshipWith(group, relationship);
     }
 
-    public Optional<Group> getGroup(UUID uuid) {
+    public Optional<Group> getGroupByUUID(UUID uuid) {
         return groups.stream().filter(g -> g.getUUID().equals(uuid)).findFirst();
     }
 
-    public Optional<Group> getGroup(String name) {
+    public Optional<Group> getGroupByName(String name) {
         return groups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst();
     }
 
@@ -82,7 +82,7 @@ public class GroupManager {
 
     private void saveGroup(Group group) throws IOException, ObjectMappingException {
         File groupsDir = DataManager.getInstance().getGroupsDir();
-        File groupFile = new File(groupsDir, group.getUUID().toString() + fileExtension);
+        File groupFile = new File(groupsDir, group.getUUID().toString() + "." + fileExtension);
         groupFile.createNewFile();
 
         HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
