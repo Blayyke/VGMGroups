@@ -62,8 +62,8 @@ public class VGMGroups {
         registerListeners();
         registerCommands();
 
-        GroupManager.getInstance().loadGroups();
         DataManager.getInstance().load();
+        GroupManager.getInstance().loadGroups();
     }
 
     private void registerListeners() {

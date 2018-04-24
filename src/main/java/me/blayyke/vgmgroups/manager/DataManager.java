@@ -15,7 +15,6 @@ public class DataManager {
     }
 
     public File getGroupsDir() {
-        if (!groupsDir.exists()) groupsDir.mkdir();
         return groupsDir;
     }
 
