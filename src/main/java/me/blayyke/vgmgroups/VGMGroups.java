@@ -3,11 +3,12 @@ package me.blayyke.vgmgroups;
 import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.command.groups.CommandGroup;
 import me.blayyke.vgmgroups.enums.Rank;
+import me.blayyke.vgmgroups.enums.Relationship;
+import me.blayyke.vgmgroups.listener.ChatListener;
 import me.blayyke.vgmgroups.listener.DamageListener;
 import me.blayyke.vgmgroups.manager.ConfigManager;
 import me.blayyke.vgmgroups.manager.DataManager;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.serializer.*;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -58,10 +59,15 @@ public class VGMGroups {
         ConfigManager.getInstance().setLoader(loader);
         ConfigManager.getInstance().loadConfig();
 
-        GroupManager.getInstance().loadGroups();
-        loadCommands();
+        registerListeners();
+        registerCommands();
 
+        GroupManager.getInstance().loadGroups();
         DataManager.getInstance().load();
+    }
+
+    private void registerListeners() {
+        Sponge.getEventManager().registerListeners(this, new ChatListener());
         Sponge.getEventManager().registerListeners(this, new DamageListener());
     }
 
@@ -76,7 +82,7 @@ public class VGMGroups {
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GroupRank.class), new GroupRankSerializer());
     }
 
-    private void loadCommands() {
+    private void registerCommands() {
         new CommandGroup(this).register();
     }
 
