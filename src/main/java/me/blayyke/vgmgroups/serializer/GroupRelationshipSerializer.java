@@ -19,9 +19,9 @@ public class GroupRelationshipSerializer implements TypeSerializer<GroupRelation
         UUID targetGroupUUID = value.getNode("Target Group").getValue(TypeToken.of(UUID.class));
         Relationship relationship = value.getNode("Relationship").getValue(TypeToken.of(Relationship.class));
 
-        Optional<Group> optGroup = GroupManager.getInstance().getGroup(groupUUID);
+        Optional<Group> optGroup = GroupManager.getInstance().getGroupByUUID(groupUUID);
         Group group = optGroup.orElseThrow(() -> new IllegalStateException("group not found!"));
-        Optional<Group> optTargetGroup = GroupManager.getInstance().getGroup(targetGroupUUID);
+        Optional<Group> optTargetGroup = GroupManager.getInstance().getGroupByUUID(targetGroupUUID);
         Group targetGroup = optTargetGroup.orElseThrow(() -> new IllegalStateException("target group not found!"));
 
         return new GroupRelationship(group, targetGroup, relationship);
