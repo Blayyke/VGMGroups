@@ -1,5 +1,6 @@
-package me.blayyke.vgmgroups;
+package me.blayyke.vgmgroups.channel;
 
+import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
