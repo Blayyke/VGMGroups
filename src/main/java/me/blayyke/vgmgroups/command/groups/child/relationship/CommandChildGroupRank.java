@@ -44,6 +44,9 @@ public class CommandChildGroupRank extends Command {
         Group playerGroup = playerGroupOpt.get();
 
         Player target = args.<Player>getOne("name").orElseThrow(() -> new CommandException(Text.of("target argument not present!")));
+        if (target.getUniqueId().equals(playerGroup.getOwnerUUID()))
+            throw new CommandException(Text.of("Cannot change rank for owner. Use /group leader <leader>"));
+
         Optional<String> rankOpt = args.getOne("rank");
 
         if (rankOpt.isPresent()) {
