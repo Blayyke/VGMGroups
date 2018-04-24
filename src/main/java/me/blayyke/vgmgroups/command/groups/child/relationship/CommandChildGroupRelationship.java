@@ -77,6 +77,8 @@ public class CommandChildGroupRelationship extends Command {
             return CommandResult.success();
         }
 
+        if (target.equals(playerGroup)) throw new CommandException(Text.of("You cannot set the relationship with yourself."));
+
         //view current one
         Optional<GroupRelationship> relationshipWith = playerGroup.getRelationshipWith(target);
         Relationship relationship;
