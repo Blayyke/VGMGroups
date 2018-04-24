@@ -13,6 +13,7 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
@@ -44,7 +45,7 @@ public class CommandChildGroupInfo extends Command {
             String name = nameOpt.get();
             Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
             if (groupOpt.isPresent()) {
-                sendGroupInfo(player, groupOpt.get());
+                player.sendMessage(getGroupInfo(groupOpt.get()));
                 return CommandResult.success();
             }
 
@@ -54,7 +55,7 @@ public class CommandChildGroupInfo extends Command {
                 Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroupByUUID(target.getUniqueId());
                 if (targetGroupOpt.isPresent()) {
                     Group targetGroup = targetGroupOpt.get();
-                    sendGroupInfo(player, targetGroup);
+                    player.sendMessage(getGroupInfo(targetGroup));
                     return CommandResult.success();
                 } else {
                     player.sendMessage(Text.of("That player is not in a group!"));
@@ -68,38 +69,57 @@ public class CommandChildGroupInfo extends Command {
 
         Optional<Group> groupOpt = GroupManager.getInstance().getPlayerGroup(player);
         Group group = groupOpt.orElseThrow(() -> new CommandException(Text.of("You are not in a group!")));
-        sendGroupInfo(player, group);
+        player.sendMessage(getGroupInfo(group));
         return CommandResult.success();
     }
 
-    private void sendGroupInfo(Player player, Group group) {
+    public static Text getGroupInfo(Group group) {
         Text newline = Text.of("\n");
 
         StringBuilder memberStrBuilder = new StringBuilder();
-        for (Player member : group.getMembers()) {
-            memberStrBuilder.append(group.getRank(member.getUniqueId()).getRank().getChatPrefix());
-            memberStrBuilder.append(member.getName()).append(", ");
+        StringBuilder offlineMemberStrBuilder = new StringBuilder();
+        int online = 0;
+        int offline = 0;
+
+        for (User member : group.getMembers()) {
+            if (member.isOnline()) {
+                memberStrBuilder.append(group.getRank(member.getUniqueId()).getRank().getChatPrefix());
+                memberStrBuilder.append(member.getName()).append(", ");
+                online++;
+                continue;
+            }
+            offlineMemberStrBuilder.append(group.getRank(member.getUniqueId()).getRank().getChatPrefix());
+            offlineMemberStrBuilder.append(member.getName()).append(", ");
+            offline++;
         }
 
         String memberStr = memberStrBuilder.toString();
-        memberStr = memberStr.substring(0, memberStr.length() - 2);
+        memberStr = memberStr.endsWith(", ") ? memberStr.substring(0, memberStr.length() - 2) : memberStr;
+        String offlineMemberStr = offlineMemberStrBuilder.toString();
+        offlineMemberStr = offlineMemberStr.endsWith(", ") ? offlineMemberStr.substring(0, offlineMemberStr.length() - 2) : offlineMemberStr;
 
-        Text text = Text.builder()
-                .append(Text.of("Group info for group " + group.getName()))
+        if (memberStr.isEmpty()) memberStr = "None";
+        if (offlineMemberStr.isEmpty()) offlineMemberStr = "None";
+
+        return Text.builder()
+                .append(Text.of("Group " + group.getName()))
+
                 .append(newline)
 
                 .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Description: "))
                 .append(Text.of(TextColors.GRAY, TextStyles.NONE, group.getDescription() == null ? "None." : group.getDescription()))
+
                 .append(newline)
 
-                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Owner: "))
-                .append(Text.of(TextColors.GRAY, TextStyles.NONE, group.getOwner().getName()))
+                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members online (" + online + "): "))
                 .append(newline)
-
-                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members: "))
                 .append(Text.of(TextColors.GRAY, TextStyles.NONE, memberStr))
-                .build();
 
-        player.sendMessage(text);
+                .append(newline)
+
+                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members offline (" + offline + "): "))
+                .append(newline)
+                .append(Text.of(TextColors.GRAY, TextStyles.NONE, offlineMemberStr))
+                .build();
     }
 }
