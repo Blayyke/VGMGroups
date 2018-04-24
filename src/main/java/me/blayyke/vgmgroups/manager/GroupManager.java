@@ -1,5 +1,6 @@
 package me.blayyke.vgmgroups.manager;
 
+import com.flowpowered.math.vector.Vector3i;
 import com.google.common.io.Files;
 import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.Group;
@@ -8,6 +9,8 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,5 +125,13 @@ public class GroupManager {
 
     public boolean isGroupNameTaken(String name) {
         return groups.stream().anyMatch(g -> g.getName().equalsIgnoreCase(name));
+    }
+
+    public Group getGroupForChunk(World world, Vector3i chunkPosition) {
+        return groups.stream().filter(group -> group.ownsChunk(world, chunkPosition)).findFirst().orElse(null);
+    }
+
+    public void isClaimed(Location<World> location) {
+
     }
 }

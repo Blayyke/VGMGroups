@@ -16,7 +16,7 @@ public class LandEditListener {
     public void change(ChangeBlockEvent event, @Root Player player) {
         Location<World> location = player.getLocation();
         Vector3i chunkPosition = location.getChunkPosition();
-        Group groupForChunk = GroupManager.getInstance().getGroupForChunk(chunkPosition);
+        Group groupForChunk = GroupManager.getInstance().getGroupForChunk(location.getExtent(), chunkPosition);
         if (groupForChunk == null) return;
         if (groupForChunk.isInGroup(player)) return;
 

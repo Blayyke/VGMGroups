@@ -241,7 +241,7 @@ public class Group {
         invitedUUIDs.remove(uniqueId);
     }
 
-    public boolean ownsChunk(Vector3i chunkPosition) {
-        return getClaims().stream().anyMatch(groupClaim -> groupClaim.getChunkX() == chunkPosition.getX() && groupClaim.getChunkZ() == chunkPosition.getY());
+    public boolean ownsChunk(World world, Vector3i chunkPosition) {
+        return getClaims().stream().anyMatch(groupClaim -> groupClaim.getWorld().equals(world) && groupClaim.getChunkX() == chunkPosition.getX() && groupClaim.getChunkZ() == chunkPosition.getY());
     }
 }
