@@ -36,6 +36,7 @@ public class CommandChildGroupClaim extends Command {
 
         if (groupForChunk == null) {
             group.claimChunk(location);
+            player.sendMessage(Text.of("Claimed chunk @ " + location.getChunkPosition().getX() + "," + location.getChunkPosition().getZ()));
             return CommandResult.success();
         }
         if (group.equals(groupForChunk)) {
