@@ -60,7 +60,6 @@ public class VGMGroups {
         ConfigManager.getInstance().loadConfig();
 
         registerListeners();
-        registerCommands();
 
         DataManager.getInstance().load();
         GroupManager.getInstance().loadGroups();
@@ -92,6 +91,7 @@ public class VGMGroups {
 
     @Listener
     public void init(GameInitializationEvent event) {
+        registerCommands();
     }
 
     @Listener
