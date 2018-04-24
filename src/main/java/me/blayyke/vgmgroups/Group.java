@@ -1,6 +1,7 @@
 package me.blayyke.vgmgroups;
 
 import com.flowpowered.math.vector.Vector3d;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.enums.Rank;
 import me.blayyke.vgmgroups.enums.Relationship;
@@ -9,6 +10,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.World;
 
 import java.util.*;
@@ -26,14 +28,20 @@ public class Group {
     private List<GroupRelationship> relationships;
     private List<GroupRank> ranks;
 
-    private List<ChunkLocation> land;
+    private List<GroupClaim> claims;
     private Vector3d home;
 
+    private MessageChannel allyChat;
+    private MessageChannel truceChat = () -> ImmutableSet.copyOf(Sponge.getGame().getServer().getOnlinePlayers());
+    private MessageChannel groupChat = () -> ImmutableSet.copyOf(Sponge.getGame().getServer().getOnlinePlayers());
+
     public Group(UUID ownerUUID, String name) {
-        this(GroupManager.getInstance().createNewUUID(), ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>());
+        this(ownerUUID, Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(), GroupManager.getInstance().createNewUUID());
+        ranks.add(new GroupRank(this, ownerUUID, Rank.OWNER));
+        System.out.println("Created new group " + name + ". Owner: " + ownerUUID);
     }
 
-    public Group(UUID uuid, UUID ownerUUID, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<GroupRank> ranks, List<ChunkLocation> land, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs) {
+    public Group(UUID ownerUUID, List<UUID> memberUUIDs, String name, String description, List<GroupRelationship> relationships, List<GroupRank> ranks, List<GroupClaim> claims, Vector3d home, UUID homeWorldUUID, List<UUID> invitedUUIDs, UUID uuid) {
         this.uuid = uuid;
         this.ownerUUID = ownerUUID;
         this.homeWorldUUID = homeWorldUUID;
@@ -46,11 +54,20 @@ public class Group {
         this.relationships = relationships;
         this.ranks = ranks;
 
-        this.land = land;
+        this.claims = claims;
         this.home = home;
+    }
 
-        removeRankIfPresent(ownerUUID);
-        ranks.add(new GroupRank(this, ownerUUID, Rank.OWNER));
+    public MessageChannel getAllyChat() {
+        return allyChat;
+    }
+
+    public MessageChannel getTruceChat() {
+        return truceChat;
+    }
+
+    public MessageChannel getGroupChat() {
+        return groupChat;
     }
 
     public UUID getUUID() {
@@ -81,8 +98,8 @@ public class Group {
         return ranks;
     }
 
-    public List<ChunkLocation> getLand() {
-        return land;
+    public List<GroupClaim> getClaims() {
+        return claims;
     }
 
     public Vector3d getHome() {
@@ -97,9 +114,9 @@ public class Group {
         return Sponge.getServer().getWorld(getHomeWorldUUID());
     }
 
-    public void setRank(Player target, Rank rank) {
-        removeRankIfPresent(target.getUniqueId());
-        ranks.add(new GroupRank(this, target.getUniqueId(), rank));
+    public void setRank(UUID targetUUID, Rank rank) {
+        removeRankIfPresent(targetUUID);
+        ranks.add(new GroupRank(this, targetUUID, rank));
     }
 
     private void removeRankIfPresent(UUID target) {
@@ -112,7 +129,7 @@ public class Group {
     }
 
     public GroupRank getRank(UUID target) {
-        return ranks.stream().filter(rank -> rank.getMemberUUID().equals(target)).findFirst().orElseThrow(() -> new IllegalStateException("no rank found"));
+        return ranks.stream().filter(rank -> rank.getMemberUUID().equals(target)).findFirst().orElseThrow(() -> new IllegalStateException("No rank found for " + target));
     }
 
     public Optional<GroupRelationship> getRelationshipWith(Group target) {
