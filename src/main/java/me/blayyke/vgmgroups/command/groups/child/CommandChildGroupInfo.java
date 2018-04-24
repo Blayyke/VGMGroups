@@ -106,20 +106,20 @@ public class CommandChildGroupInfo extends Command {
 
                 .append(newline)
 
-                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Description: "))
-                .append(Text.of(TextColors.GRAY, TextStyles.NONE, group.getDescription() == null ? "None." : group.getDescription()))
+                .append(Text.of(TextColors.GREEN, "Description: "))
+                .append(Text.of(TextColors.GRAY, group.getDescription() == null ? "None." : group.getDescription()))
 
                 .append(newline)
 
-                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members online (" + online + "): "))
+                .append(Text.of(TextColors.GREEN, "Members online (" + online + "): "))
                 .append(newline)
-                .append(Text.of(TextColors.GRAY, TextStyles.NONE, memberStr))
+                .append(Text.of(TextColors.GRAY, memberStr))
 
                 .append(newline)
 
-                .append(Text.of(TextColors.GREEN, TextStyles.BOLD, "Members offline (" + offline + "): "))
+                .append(Text.of(TextColors.GREEN, "Members offline (" + offline + "): "))
                 .append(newline)
-                .append(Text.of(TextColors.GRAY, TextStyles.NONE, offlineMemberStr))
+                .append(Text.of(TextColors.GRAY, offlineMemberStr))
                 .build();
     }
 }
