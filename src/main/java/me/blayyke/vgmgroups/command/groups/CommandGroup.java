@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class CommandGroup extends CommandContainer {
     public CommandGroup(VGMGroups plugin) {
-        super(plugin, Arrays.asList("group", "groups"), Text.of("Base command"));
+        super(plugin, Arrays.asList("group", "groups", "g"), Text.of("Base command"));
     }
 
     @Nonnull
@@ -33,6 +33,7 @@ public class CommandGroup extends CommandContainer {
                 new CommandChildGroupLeader(getPlugin()),
                 new CommandChildGroupList(getPlugin()),
                 new CommandChildGroupName(getPlugin()),
+                new CommandChildGroupMap(getPlugin()),
                 new CommandChildGroupRank(getPlugin()),
                 new CommandChildGroupRelationship(getPlugin())
         );
