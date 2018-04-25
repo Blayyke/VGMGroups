@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class CommandChildGroupChat extends Command {
     public CommandChildGroupChat(VGMGroups plugin) {
-        super(plugin, Lists.newArrayList("create"), Text.of("Create a group."));
+        super(plugin, Lists.newArrayList("chat"), Text.of("Change your group chat."));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CommandChildGroupChat extends Command {
     @Nonnull
     @Override
     protected String getPermission() {
-        return "create";
+        return "chat";
     }
 
     @Override
