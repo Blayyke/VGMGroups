@@ -1,6 +1,8 @@
 package me.blayyke.vgmgroups.listener;
 
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.GroupRelationship;
+import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -25,6 +27,15 @@ public class DamageListener {
         if (targetGroup.get().equals(sourceGroup.get())) {
             //tried to attack fellow group member, cancel damage.
             source.sendMessage(TextSerializers.FORMATTING_CODE.deserialize("&cYou cannot hit a group member!"));
+            event.setCancelled(true);
+        }
+        Optional<GroupRelationship> relationshipWith = targetGroup.get().getRelationshipWith(sourceGroup.get());
+        if (!relationshipWith.isPresent()) return;
+        Relationship relationship = relationshipWith.get().getRelationship();
+
+        if (relationship == Relationship.ALLY || relationship == Relationship.TRUCE) {
+            //tried to attack ally or truce member, cancel damage.
+            source.sendMessage(TextSerializers.FORMATTING_CODE.deserialize("&cYou cannot hit a member of a truced or allied faction!"));
             event.setCancelled(true);
         }
     }
