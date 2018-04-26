@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector3i;
 import com.google.common.io.Files;
 import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.enums.Relationship;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -73,6 +74,13 @@ public class GroupManager {
 
     public void deleteGroup(Group group) {
         groups.remove(group);
+        getGroupFile(group).delete();
+        VGMGroups.getLogger().info("Deleted group " + group.getUUID());
+    }
+
+    private File getGroupFile(Group group) {
+        File groupsDir = DataManager.getInstance().getGroupsDir();
+        return new File(groupsDir, group.getUUID().toString() + "." + fileExtension);
     }
 
     public Optional<Group> getPlayerGroup(Player player) {
@@ -84,8 +92,7 @@ public class GroupManager {
     }
 
     private void saveGroup(Group group) throws IOException, ObjectMappingException {
-        File groupsDir = DataManager.getInstance().getGroupsDir();
-        File groupFile = new File(groupsDir, group.getUUID().toString() + "." + fileExtension);
+        File groupFile = getGroupFile(group);
         groupFile.createNewFile();
 
         HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
@@ -104,13 +111,12 @@ public class GroupManager {
 
     public Group createNewGroup(Player player, String name) {
         Group group = new Group(player.getUniqueId(), name);
-        groups.add(group);
-
         try {
             saveGroup(group);
         } catch (IOException | ObjectMappingException e) {
             throw new RuntimeException("Failed to save group " + group.getName(), e);
         }
+        groups.add(group);
         return group;
     }
 
