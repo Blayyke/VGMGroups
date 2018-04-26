@@ -6,7 +6,6 @@ import me.blayyke.vgmgroups.GroupRank;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.enums.Rank;
-import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -42,12 +41,15 @@ public class CommandChildGroupRank extends Command {
         Group group = requireGroup(player);
 
         Player target = args.<Player>getOne("name").orElseThrow(() -> new CommandException(Text.of("target argument not present!")));
-        if (target.getUniqueId().equals(group.getOwnerUUID()))
-            throw new CommandException(Text.of("Cannot change rank for owner. Use /group leader <leader>"));
 
         Optional<String> rankOpt = args.getOne("rank");
         if (rankOpt.isPresent()) {
             //set new rank
+
+            //ensure we aren't trying to change the owners rank.
+            if (target.getUniqueId().equals(group.getOwnerUUID()))
+                error(Text.of("Cannot change rank for owner."));
+
             Rank rank = Rank.fromString(rankOpt.get());
             if (rank == null) {
                 StringBuilder rankStr = new StringBuilder();
@@ -56,6 +58,12 @@ public class CommandChildGroupRank extends Command {
 
                 error(Text.of("Invalid rank setting. Valid settings are: " + rankStr.substring(0, rankStr.length() - 2)));
             }
+
+            // make sure this player isnt a normie
+            if (!group.getRank(player.getUniqueId()).getRank().canManageRanks(rank))
+                error(Text.of("You cannot promote / demote players!"));
+
+            // everything's good to go. do the stuff
             group.setRank(target.getUniqueId(), rank);
             player.sendMessage(Text.of(target.getName() + "'s rank is now " + rank.getFriendlyName() + "."));
             return CommandResult.success();
