@@ -28,7 +28,7 @@ public enum Rank {
         return chatPrefix;
     }
 
-    public boolean canManageRanks(Rank rankToSet) {
+    public boolean isOfficer() {
         return isOwner() || this == OFFICER;
     }
 
