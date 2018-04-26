@@ -2,9 +2,9 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -44,8 +44,14 @@ public class CommandChildGroupLeader extends Command {
         final Player target = args.<Player>getOne("player")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
+        if (!group.getRank(player.getUniqueId()).getRank().isOwner()) {
+            Texts.OWNER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         group.setOwner(target.getUniqueId());
-        player.sendMessage(Text.of(target.getName() + " has set you as the leader for your group."));
+        Texts.LEADER_SET.sendWithVars(player, target.getName());
+        Texts.LEADER_RECEIVE.sendWithVars(target, player.getName());
 
         return CommandResult.success();
     }

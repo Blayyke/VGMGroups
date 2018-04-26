@@ -2,6 +2,7 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -16,7 +17,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.format.TextStyles;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -58,12 +58,12 @@ public class CommandChildGroupInfo extends Command {
                     player.sendMessage(getGroupInfo(targetGroup));
                     return CommandResult.success();
                 } else {
-                    player.sendMessage(Text.of("That player is not in a group!"));
+                    Texts.PLAYER_NO_GROUP.send(player);
                     return CommandResult.empty();
                 }
             }
 
-            player.sendMessage(Text.of("That group does not exist or that player is not in a group!"));
+            Texts.INPUT_NOT_FOUND.send(player);
             return CommandResult.empty();
         }
 

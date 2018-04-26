@@ -2,9 +2,9 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -45,11 +45,7 @@ public class CommandChildGroupName extends Command {
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
         group.setName(name);
-
-        player.sendMessage(Text.builder()
-                .append(Text.of(TextColors.GREEN, "Your group's name has been set to:"))
-                .append(Text.of(TextColors.GRAY, name)).toText());
-
+        Texts.NAME_UPDATED.broadcastWithVars(group, name);
         return CommandResult.success();
     }
 }

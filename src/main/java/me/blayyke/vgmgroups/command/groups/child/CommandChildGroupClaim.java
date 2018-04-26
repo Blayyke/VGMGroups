@@ -2,6 +2,7 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -34,17 +35,22 @@ public class CommandChildGroupClaim extends Command {
         Group group = requireGroup(player);
         Group groupForChunk = GroupManager.getInstance().getGroupForChunk(location.getExtent(), location.getChunkPosition());
 
+        if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+            Texts.OFFICER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         if (groupForChunk == null) {
             group.claimChunk(location);
-            player.sendMessage(Text.of("Claimed chunk @ " + location.getChunkPosition().getX() + "," + location.getChunkPosition().getZ()));
+            Texts.CLAIM_SUCCESS.sendWithVars(player, location.getChunkPosition().getX(), location.getChunkPosition().getZ());
             return CommandResult.success();
         }
         if (group.equals(groupForChunk)) {
-            player.sendMessage(Text.of("Your group already owns this chunk."));
-            return CommandResult.success();
+            Texts.CLAIMED_SELF.send(player);
+            return CommandResult.empty();
         }
 
-        error(Text.of("This chunk is claimed by " + groupForChunk.getName() + "!"));
-        return CommandResult.success();
+        Texts.CLAIMED_OTHER.sendWithVars(player, groupForChunk.getName());
+        return CommandResult.empty();
     }
 }

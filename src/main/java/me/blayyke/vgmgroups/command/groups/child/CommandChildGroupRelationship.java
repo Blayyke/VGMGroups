@@ -2,11 +2,12 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.GroupRelationship;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
-import me.blayyke.vgmgroups.GroupRelationship;
 import me.blayyke.vgmgroups.enums.Relationship;
+import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -42,6 +43,11 @@ public class CommandChildGroupRelationship extends Command {
         Player player = playersOnly(src);
         Group group = requireGroup(player);
 
+        if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+            Texts.OFFICER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         String name = args.<String>getOne("name").orElseThrow(() -> new CommandException(Text.of("name argument not present!")));
         Optional<String> relationshipOpt = args.getOne("relationship");
 
@@ -55,10 +61,15 @@ public class CommandChildGroupRelationship extends Command {
             //find the targets group
             Player targetPlayer = targetPlayerOpt.get();
             Optional<Group> targetGroupOpt = GroupManager.getInstance().getPlayerGroup(targetPlayer);
-            if (!targetGroupOpt.isPresent()) error(Text.of("That player is not in a group."));
+            if (!targetGroupOpt.isPresent()) {
+                Texts.PLAYER_NO_GROUP.send(player);
+                return CommandResult.empty();
+            }
             target = targetGroupOpt.get();
-        } else
-            throw new CommandException(Text.of("No player or group found with your input."));
+        } else {
+            Texts.INPUT_NOT_FOUND.send(player);
+            return CommandResult.empty();
+        }
 
         if (relationshipOpt.isPresent()) {
             //set new relationship
@@ -71,11 +82,15 @@ public class CommandChildGroupRelationship extends Command {
                 error(Text.of("Invalid relationship setting. Valid settings are: " + relationshipStr.substring(0, relationshipStr.length() - 2)));
             }
             group.setRelationshipWith(target, relationship);
-            player.sendMessage(Text.of("Your relationship with " + target.getName() + " is now " + relationship.getFriendlyName() + "."));
+            Texts.RELATIONSHIP_UPDATE.broadcastWithVars(group, target.getName(), relationship.getFriendlyName());
+            Texts.RELATIONSHIP_UPDATE_RECEIVE.broadcastWithVars(target, group.getName(), relationship.getFriendlyName());
             return CommandResult.success();
         }
 
-        if (target.equals(group)) throw new CommandException(Text.of("You cannot set the relationship with yourself."));
+        if (target.equals(group)) {
+            Texts.CANNOT_TARGET_SELF.send(player);
+            return CommandResult.empty();
+        }
 
         //view current one
         Optional<GroupRelationship> relationshipWith = group.getRelationshipWith(target);
@@ -83,7 +98,7 @@ public class CommandChildGroupRelationship extends Command {
         if (!relationshipWith.isPresent()) relationship = Relationship.NEUTRAL;
         else relationship = relationshipWith.get().getRelationship();
 
-        player.sendMessage(Text.of("Your relationship with " + target.getName() + " is " + relationship.getFriendlyName() + "."));
+        Texts.RELATIONSHIP_VIEW.sendWithVars(player, target.getName(), relationship.getFriendlyName());
         return CommandResult.success();
     }
 }

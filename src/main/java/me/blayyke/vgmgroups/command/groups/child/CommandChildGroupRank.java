@@ -3,6 +3,7 @@ package me.blayyke.vgmgroups.command.groups.child;
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.GroupRank;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.enums.Rank;
@@ -40,15 +41,26 @@ public class CommandChildGroupRank extends Command {
         Player player = playersOnly(src);
         Group group = requireGroup(player);
 
+        if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+            Texts.OFFICER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         Player target = args.<Player>getOne("name").orElseThrow(() -> new CommandException(Text.of("target argument not present!")));
+        if (player.getUniqueId().equals(target.getUniqueId())) {
+            Texts.CANNOT_TARGET_SELF.send(player);
+            return CommandResult.empty();
+        }
 
         Optional<String> rankOpt = args.getOne("rank");
         if (rankOpt.isPresent()) {
             //set new rank
 
             //ensure we aren't trying to change the owners rank.
-            if (target.getUniqueId().equals(group.getOwnerUUID()))
-                error(Text.of("Cannot change rank for owner."));
+            if (target.getUniqueId().equals(group.getOwnerUUID())) {
+                Texts.CANNOT_CHANGE_OWNER_RANK.send(player);
+                return CommandResult.empty();
+            }
 
             Rank rank = Rank.fromString(rankOpt.get());
             if (rank == null) {
@@ -60,19 +72,22 @@ public class CommandChildGroupRank extends Command {
             }
 
             // make sure this player isnt a normie
-            if (!group.getRank(player.getUniqueId()).getRank().canManageRanks(rank))
-                error(Text.of("You cannot promote / demote players!"));
+            if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+                Texts.OFFICER_ONLY.send(player);
+                return CommandResult.empty();
+            }
 
             // everything's good to go. do the stuff
             group.setRank(target.getUniqueId(), rank);
-            player.sendMessage(Text.of(target.getName() + "'s rank is now " + rank.getFriendlyName() + "."));
+            Texts.RANK_UPDATE_SEND.sendWithVars(player, target.getName(), rank.getFriendlyName());
+            Texts.RANK_UPDATE_RECEIVE.sendWithVars(target, rank.getFriendlyName());
             return CommandResult.success();
         }
 
         //view current rank
         GroupRank targetRank = group.getRank(target.getUniqueId());
 
-        player.sendMessage(Text.of(target.getName() + "'s rank is " + targetRank.getRank().getFriendlyName() + "."));
+        Texts.RANK_VIEW.sendWithVars(player, target.getName(), targetRank.getRank().getFriendlyName());
         return CommandResult.success();
     }
 }

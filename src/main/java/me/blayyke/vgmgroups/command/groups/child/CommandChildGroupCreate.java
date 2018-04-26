@@ -2,6 +2,7 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -41,15 +42,17 @@ public class CommandChildGroupCreate extends Command {
 
         GroupManager manager = GroupManager.getInstance();
         Optional<Group> playerGroup = manager.getPlayerGroup(player);
-        if (playerGroup.isPresent())
-            throw new CommandException(Text.of(TextColors.RED, "You must leave your current group before you can create one!"));
+        if (playerGroup.isPresent()) {
+            Texts.ALREADY_IN_GROUP.send(player);
+            return CommandResult.empty();
+        }
 
         final String name = args.<String>getOne("name")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "argument missing")));
         manager.createNewGroup(player, name);
 
-        player.sendMessage(Text.of(TextColors.GREEN, "Successfully created group " + name + "! Set your description with /group desc <desc>"));
-        Sponge.getServer().getBroadcastChannel().send(Text.of(TextColors.GRAY, player.getName() + " created the group " + name + "."));
+        Texts.GROUP_CREATED.sendWithVars(player, name);
+        Texts.OTHER_GROUP_CREATED.globalBroadcast();
         return CommandResult.success();
     }
 }

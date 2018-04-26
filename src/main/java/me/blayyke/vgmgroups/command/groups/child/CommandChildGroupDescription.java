@@ -2,9 +2,9 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -41,15 +41,17 @@ public class CommandChildGroupDescription extends Command {
         Player player = playersOnly(src);
         Group group = requireGroup(player);
 
+        if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+            Texts.OFFICER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         final String desc = args.<String>getOne("desc")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
         group.setDescription(desc);
 
-        player.sendMessage(Text.builder()
-                .append(Text.of(TextColors.GREEN, "Your group's description has been set to:"))
-                .append(Text.of(TextColors.GRAY, desc)).toText());
-
+        Texts.DESCRIPTION_UPDATE.sendWithVars(player, desc);
         return CommandResult.success();
     }
 }

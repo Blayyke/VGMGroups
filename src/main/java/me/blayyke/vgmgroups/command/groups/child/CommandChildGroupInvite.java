@@ -2,9 +2,9 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -44,14 +44,24 @@ public class CommandChildGroupInvite extends Command {
         final Player target = args.<Player>getOne("player")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
 
+        if (player.getUniqueId().equals(target.getUniqueId())) {
+            Texts.CANNOT_TARGET_SELF.send(player);
+            return CommandResult.empty();
+        }
+
+        if (!group.getRank(player.getUniqueId()).getRank().isOfficer()) {
+            Texts.OFFICER_ONLY.send(player);
+            return CommandResult.empty();
+        }
+
         if (group.isInvited(target.getUniqueId())) {
-            player.sendMessage(Text.of("Revoked " + target.getName() + "'s group invitation."));
+            Texts.INVITATION_REVOKED.sendWithVars(player, target.getName());
             group.removeInvited(target.getUniqueId());
             return CommandResult.success();
         }
-        group.broadcastMessage(Text.of(target.getName() + " has been invited to your group."));
+        Texts.INVITATION_SENT.broadcastWithVars(group, target.getName());
         group.addInvited(target);
-        target.sendMessage(Text.of("You have been invited to " + group.getName() + " by " + player.getName() + "."));
+        Texts.INVITATION_RECEIVED.sendWithVars(target, group.getName(), player.getName());
 
         return CommandResult.success();
     }

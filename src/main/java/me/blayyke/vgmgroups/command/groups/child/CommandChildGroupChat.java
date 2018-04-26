@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
-import me.blayyke.vgmgroups.manager.GroupManager;
+import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -42,6 +42,6 @@ public class CommandChildGroupChat extends Command {
         final String channel = args.<String>getOne("channel")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "argument missing")));
 
-        return CommandResult.success();
+        throw new NotImplementedException("chat not implemented");
     }
 }

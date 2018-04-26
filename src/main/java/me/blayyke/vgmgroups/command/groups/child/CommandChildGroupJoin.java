@@ -2,6 +2,7 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -38,7 +39,7 @@ public class CommandChildGroupJoin extends Command {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
         Optional<String> nameOpt = args.getOne("name");
-        String name = nameOpt.orElseThrow(() -> new CommandException(Text.of("")));
+        String name = nameOpt.orElseThrow(() -> new CommandException(Text.of("Missing argument")));
         Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
         if (groupOpt.isPresent()) {
             attemptJoinGroup(player, groupOpt.get());
@@ -54,18 +55,22 @@ public class CommandChildGroupJoin extends Command {
                 attemptJoinGroup(player, targetGroup);
                 return CommandResult.success();
             } else {
-                player.sendMessage(Text.of("That player is not in a group!"));
+                Texts.PLAYER_NO_GROUP.send(player);
                 return CommandResult.empty();
             }
         }
 
-        player.sendMessage(Text.of("That group does not exist or that player is not in a group!"));
+        Texts.INPUT_NOT_FOUND.send(player);
         return CommandResult.empty();
     }
 
-    private void attemptJoinGroup(Player player, Group group) throws CommandException {
-        if (!group.isInvited(player.getUniqueId()))
-            throw new CommandException(Text.of("You are not invited to this group."));
+    private void attemptJoinGroup(Player player, Group group) {
+        if (!group.isInvited(player.getUniqueId())) {
+            Texts.GROUP_NOT_INVITED.sendWithVars(player);
+            return;
+        }
+        Texts.GROUP_OTHER_JOINED.broadcast(group);
+        Texts.GROUP_JOINED.sendWithVars(player, group.getName());
         group.playerJoin(player);
     }
 }
