@@ -38,15 +38,15 @@ public class CommandChildGroupMap extends Command {
         Player player = playersOnly(src);
         World world = player.getWorld();
 
-        Text notCapturedMark = Text.of(TextColors.GRAY, "█");
-        Text factionMark = Text.of(TextColors.GREEN, "█");
-        Text allianceMark = Text.of(TextColors.AQUA, "█");
-        Text enemyMark = Text.of(TextColors.RED, "█");
-        Text truceMark = Text.of(TextColors.LIGHT_PURPLE, "█");
-        Text normalFactionMark = Text.of(TextColors.WHITE, "█");
-        Text playerLocationMark = Text.of(TextColors.GOLD, "█");
+        Text notCapturedMark = Text.of(TextColors.GRAY, "\u2591");
+        Text factionMark = Text.of(TextColors.GREEN, "\u2588");
+        Text allianceMark = Text.of(TextColors.AQUA, "\u2588");
+        Text enemyMark = Text.of(TextColors.RED, "\u2588");
+        Text truceMark = Text.of(TextColors.LIGHT_PURPLE, "\u2588");
+        Text normalFactionMark = Text.of(TextColors.WHITE, "\u2588");
+        Text playerLocationMark = Text.of(TextColors.GOLD, "\u2588");
 
-        Vector3i playerPosition = player.getLocation().getChunkPosition();
+        Vector3i chunkPosition = player.getLocation().getChunkPosition();
 
         List<Text> map = new ArrayList<>();
         StringBuilder normalFactions = new StringBuilder();
@@ -74,7 +74,7 @@ public class CommandChildGroupMap extends Command {
                     continue;
                 }
 
-                Vector3i chunk = playerPosition.add(column, 0, row);
+                Vector3i chunk = chunkPosition.add(column, 0, row);
                 Group chunkGroup = GroupManager.getInstance().getGroupForChunk(world, chunk);
                 if (chunkGroup != null) {
                     Optional<Group> playerGroupOpt = GroupManager.getInstance().getPlayerGroup(player);
@@ -131,15 +131,13 @@ public class CommandChildGroupMap extends Command {
         }
 
         String playerPositionClaim = "none";
-
-        if (GroupManager.getInstance().getGroupForChunk(world, playerPosition) != null) {
-            playerPositionClaim = GroupManager.getInstance().getGroupForChunk(world, playerPosition).getName();
-        }
+        if (GroupManager.getInstance().getGroupForChunk(world, chunkPosition) != null)
+            playerPositionClaim = GroupManager.getInstance().getGroupForChunk(world, chunkPosition).getName();
 
         //Print map
-        player.sendMessage(Text.of(TextColors.GREEN, "======Group Map======"));
+        player.sendMessage(Text.of(TextColors.GREEN, "==========Group Map=========="));
         map.stream().map(Text::of).forEach(player::sendMessage);
-        player.sendMessage(Text.of(TextColors.GREEN, "====================="));
+        player.sendMessage(Text.of(TextColors.GREEN, "============================"));
 
         //Print factions on map
         if (!playerFaction.isEmpty())
@@ -158,7 +156,7 @@ public class CommandChildGroupMap extends Command {
             player.sendMessage(Text.of(TextColors.LIGHT_PURPLE,
                     "Truce: " + truceFactions.substring(0, enemyFactions.length() - 2)));
 
-        player.sendMessage(Text.of("Currently standing at: ", TextColors.GOLD, playerPosition.toString(), TextColors.WHITE, " which is claimed by ", TextColors.GOLD, playerPositionClaim));
+        player.sendMessage(Text.of("Currently standing at: ", TextColors.GOLD, chunkPosition.getX() + ", " + chunkPosition.getZ(), TextColors.WHITE, " which is claimed by ", TextColors.GOLD, playerPositionClaim));
         return CommandResult.success();
     }
 }
