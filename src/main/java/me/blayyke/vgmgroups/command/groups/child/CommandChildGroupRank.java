@@ -64,7 +64,7 @@ public class CommandChildGroupRank extends Command {
         //view current rank
         GroupRank targetRank = group.getRank(target.getUniqueId());
 
-        player.sendMessage(Text.of(target.getName() + "'s rank is now " + targetRank.getRank().getFriendlyName() + "."));
+        player.sendMessage(Text.of(target.getName() + "'s rank is " + targetRank.getRank().getFriendlyName() + "."));
         return CommandResult.success();
     }
 }
