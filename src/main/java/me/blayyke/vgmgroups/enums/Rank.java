@@ -29,6 +29,10 @@ public enum Rank {
     }
 
     public boolean canManageRanks(Rank rankToSet) {
-        return this == OWNER || this == OFFICER;
+        return isOwner() || this == OFFICER;
+    }
+
+    public boolean isOwner() {
+        return this == OWNER;
     }
 }
