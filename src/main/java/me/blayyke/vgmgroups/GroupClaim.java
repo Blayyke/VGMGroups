@@ -1,15 +1,15 @@
 package me.blayyke.vgmgroups;
 
-import org.spongepowered.api.world.World;
+import java.util.UUID;
 
 public class GroupClaim {
-    private World world;
+    private UUID worldUUID;
 
     private int chunkX;
     private int chunkY;
 
-    public GroupClaim(World world, int chunkX, int chunkY) {
-        this.world = world;
+    public GroupClaim(UUID worldUUID, int chunkX, int chunkY) {
+        this.worldUUID = worldUUID;
         this.chunkX = chunkX;
         this.chunkY = chunkY;
     }
@@ -22,7 +22,7 @@ public class GroupClaim {
         return chunkY;
     }
 
-    public World getWorld() {
-        return world;
+    public UUID getWorldUUID() {
+        return worldUUID;
     }
 }

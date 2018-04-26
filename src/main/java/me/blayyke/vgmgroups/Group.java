@@ -244,7 +244,7 @@ public class Group {
 
     public boolean ownsChunk(World world, Vector3i chunkPosition) {
         for (GroupClaim claim : claims)
-            if (claim.getWorld().getUniqueId().equals(world.getUniqueId()) && claim.getChunkX() == chunkPosition.getX() && claim.getChunkZ() == chunkPosition.getZ())
+            if (claim.getWorldUUID().equals(world.getUniqueId()) && claim.getChunkX() == chunkPosition.getX() && claim.getChunkZ() == chunkPosition.getZ())
                 return true;
         return false;
     }
@@ -252,6 +252,6 @@ public class Group {
     public void claimChunk(Location<World> location) {
         int chunkX = location.getChunkPosition().getX();
         int chunkZ = location.getChunkPosition().getZ();
-        claims.add(new GroupClaim(location.getExtent(), chunkX, chunkZ));
+        claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
     }
 }
