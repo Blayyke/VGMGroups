@@ -13,7 +13,7 @@ import org.spongepowered.api.world.World;
 
 import java.util.Optional;
 
-public class MoveListener {
+public class MoveListener extends VGMGListener {
     @Listener
     public void onMove(MoveEntityEvent event, @Root Player player) {
         Optional<Group> groupOpt = GroupManager.getInstance().getPlayerGroup(player);

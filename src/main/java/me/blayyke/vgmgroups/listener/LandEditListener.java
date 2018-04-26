@@ -11,7 +11,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-public class LandEditListener {
+public class LandEditListener extends VGMGListener {
     @Listener
     public void change(ChangeBlockEvent event, @Root Player player) {
         Location<World> location = player.getLocation();

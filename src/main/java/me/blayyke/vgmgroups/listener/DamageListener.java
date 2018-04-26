@@ -13,7 +13,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.Optional;
 
-public class DamageListener {
+public class DamageListener extends VGMGListener{
     @Listener
     public void handle(DamageEntityEvent event, @Root Player source) {
         if (!(event.getTargetEntity() instanceof Player)) return;

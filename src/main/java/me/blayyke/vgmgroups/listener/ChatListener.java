@@ -7,7 +7,7 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.text.channel.MessageChannel;
 
-public class ChatListener {
+public class ChatListener extends VGMGListener {
     private MessageChannelPrefixer prefixerChannel = new MessageChannelPrefixer();
 
     @Listener
