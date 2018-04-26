@@ -38,13 +38,13 @@ public class CommandChildGroupMap extends Command {
         Player player = playersOnly(src);
         World world = player.getWorld();
 
-        Text notCapturedMark = Text.of(TextColors.GRAY, "/");
-        Text factionMark = Text.of(TextColors.GREEN, "+");
-        Text allianceMark = Text.of(TextColors.AQUA, "+");
-        Text enemyMark = Text.of(TextColors.RED, "#");
-        Text truceMark = Text.of(TextColors.LIGHT_PURPLE, "+");
-        Text normalFactionMark = Text.of(TextColors.WHITE, "+");
-        Text playerLocationMark = Text.of(TextColors.GOLD, "+");
+        Text notCapturedMark = Text.of(TextColors.GRAY, "█");
+        Text factionMark = Text.of(TextColors.GREEN, "█");
+        Text allianceMark = Text.of(TextColors.AQUA, "█");
+        Text enemyMark = Text.of(TextColors.RED, "█");
+        Text truceMark = Text.of(TextColors.LIGHT_PURPLE, "█");
+        Text normalFactionMark = Text.of(TextColors.WHITE, "█");
+        Text playerLocationMark = Text.of(TextColors.GOLD, "█");
 
         Vector3i playerPosition = player.getLocation().getChunkPosition();
 
