@@ -17,31 +17,24 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.DefaultConfig;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.MoveEntityEvent;
-import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.world.Chunk;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
 
 @Plugin(id = Refs.ID, name = Refs.NAME, authors = "Blayyke", description = Refs.DESCRIPTION, version = Refs.VERSION)
 public class VGMGroups {
     @Inject
-    private Logger logger;
-
-    @Inject
     private static PluginContainer pluginContainer;
+
+    private static Logger logger = LoggerFactory.getLogger(Refs.NAME);
 
     @Inject
     @DefaultConfig(sharedRoot = true)
@@ -51,8 +44,12 @@ public class VGMGroups {
     @DefaultConfig(sharedRoot = true)
     private Path path;
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
     @Listener
-    public void preInit(GamePreInitializationEvent event) throws IOException, ObjectMappingException {
+    public void preInit(GamePreInitializationEvent event) throws IOException {
         registerTypeSerializers();
 
         ConfigManager.getInstance().setConfigPath(path);
@@ -108,16 +105,6 @@ public class VGMGroups {
 
     @Listener
     public void serverStart(GameStartedServerEvent event) {
-    }
-
-    @Listener
-    public void playerMove(MoveEntityEvent entityEvent, @First Player player) {
-        Location<World> location = player.getLocation();
-        Optional<Chunk> chunkOpt = location.getExtent().getChunk(location.getChunkPosition());
-        if (!chunkOpt.isPresent()) return;
-        //// TODO: 19/04/2018
-//        Chunk chunk = chunkOpt.get();
-//        chunk.loca
     }
 
     @Listener
