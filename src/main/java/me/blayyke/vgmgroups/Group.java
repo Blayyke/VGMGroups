@@ -132,7 +132,7 @@ public class Group {
 
     public void setRelationshipWith(Group target, Relationship relationship) {
         removeRelationshipIfPresent(target);
-        relationships.add(new GroupRelationship(this, target, relationship));
+        relationships.add(new GroupRelationship(this.uuid, target.uuid, relationship));
     }
 
     public GroupRank getRank(UUID target) {
@@ -140,7 +140,7 @@ public class Group {
     }
 
     public Optional<GroupRelationship> getRelationshipWith(Group target) {
-        return relationships.stream().filter(groupRelationship -> groupRelationship.getTargetGroup().equals(target)).findFirst();
+        return relationships.stream().filter(groupRelationship -> groupRelationship.getTargetGroupUUID().equals(target)).findFirst();
     }
 
     private void removeRelationshipIfPresent(Group target) {

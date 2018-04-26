@@ -2,23 +2,25 @@ package me.blayyke.vgmgroups;
 
 import me.blayyke.vgmgroups.enums.Relationship;
 
+import java.util.UUID;
+
 public class GroupRelationship {
-    private Group group;
-    private Group targetGroup;
+    private UUID groupUUID;
+    private UUID targetGroupUUID;
     private Relationship relationship;
 
-    public GroupRelationship(Group group, Group targetGroup, Relationship relationship) {
-        this.group = group;
-        this.targetGroup = targetGroup;
+    public GroupRelationship(UUID groupUUID, UUID targetGroupUUID, Relationship relationship) {
+        this.groupUUID = groupUUID;
+        this.targetGroupUUID = targetGroupUUID;
         this.relationship = relationship;
     }
 
-    public Group getGroup() {
-        return group;
+    public UUID getGroupUUID() {
+        return groupUUID;
     }
 
-    public Group getTargetGroup() {
-        return targetGroup;
+    public UUID getTargetGroupUUID() {
+        return targetGroupUUID;
     }
 
     public Relationship getRelationship() {
@@ -29,6 +31,6 @@ public class GroupRelationship {
     public boolean equals(Object obj) {
         if (!(obj instanceof GroupRelationship)) return false;
         GroupRelationship relationship = (GroupRelationship) obj;
-        return relationship.getGroup().equals(getGroup()) && relationship.getTargetGroup().equals(getTargetGroup()) && this.relationship == relationship.getRelationship();
+        return relationship.getGroupUUID().equals(getGroupUUID()) && relationship.getTargetGroupUUID().equals(getTargetGroupUUID()) && this.relationship == relationship.getRelationship();
     }
 }
