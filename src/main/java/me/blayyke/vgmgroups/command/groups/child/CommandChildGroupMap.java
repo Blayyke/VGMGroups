@@ -38,7 +38,7 @@ public class CommandChildGroupMap extends Command {
         Player player = playersOnly(src);
         World world = player.getWorld();
 
-        Text notCapturedMark = Text.of(TextColors.GRAY, "\u2591");
+        Text notCapturedMark = Text.of(TextColors.GRAY, "\u2592");
         Text factionMark = Text.of(TextColors.GREEN, "\u2588");
         Text allianceMark = Text.of(TextColors.AQUA, "\u2588");
         Text enemyMark = Text.of(TextColors.RED, "\u2588");
@@ -135,9 +135,9 @@ public class CommandChildGroupMap extends Command {
             playerPositionClaim = GroupManager.getInstance().getGroupForChunk(world, chunkPosition).getName();
 
         //Print map
-        player.sendMessage(Text.of(TextColors.GREEN, "==========Group Map=========="));
+        player.sendMessage(Text.of(TextColors.GREEN, "===========Group Map============"));
         map.stream().map(Text::of).forEach(player::sendMessage);
-        player.sendMessage(Text.of(TextColors.GREEN, "============================"));
+        player.sendMessage(Text.of(TextColors.GREEN, "==============================="));
 
         //Print factions on map
         if (!playerFaction.isEmpty())
