@@ -30,8 +30,15 @@ public class MoveListener extends VGMGListener {
         if (!newChunk.isPresent()) return;
 
         boolean equals = newChunk.get().equals(oldChunk.get());
-        if (!equals) {
-            player.sendMessage(Text.of("You have entered a new chunk!"));
-        }
+        if (equals) return;
+
+        Group groupForOldChunk = GroupManager.getInstance().getGroupForChunk(world, newChunk.get().getPosition());
+        Group groupForChunk = GroupManager.getInstance().getGroupForChunk(world, newChunk.get().getPosition());
+        if (groupForOldChunk == null && groupForChunk == null) return;
+
+        if (groupForOldChunk != null && groupForOldChunk.equals(groupForChunk)) return;
+        if (groupForChunk != null && groupForChunk.equals(groupForOldChunk)) return;
+
+        player.sendMessage(Text.of("You have entered a new chunk owned by " + (groupForChunk == null ? "Wilderness" : groupForChunk.getName()) + "!"));
     }
 }
