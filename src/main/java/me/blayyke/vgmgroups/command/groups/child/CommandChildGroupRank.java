@@ -25,8 +25,11 @@ public class CommandChildGroupRank extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{GenericArguments.onlyOne(GenericArguments.player(Text.of("member"))), GenericArguments.optional(GenericArguments.string(Text.of("rank")))});
+    public CommandElement[] getArguments() {
+        return new CommandElement[]{
+                GenericArguments.onlyOne(GenericArguments.player(Text.of("member"))),
+                GenericArguments.optional(GenericArguments.string(Text.of("rank")))
+        };
     }
 
     @Nonnull

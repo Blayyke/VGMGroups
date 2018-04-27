@@ -68,8 +68,8 @@ public abstract class Command implements CommandExecutor {
     protected abstract String getPermission();
 
     @Nonnull
-    protected Optional<CommandElement[]> getArguments() {
-        return Optional.empty();
+    protected CommandElement[] getArguments() {
+        return new CommandElement[0];
     }
 
     CommandSpec getCommandSpec() {
@@ -77,7 +77,7 @@ public abstract class Command implements CommandExecutor {
                 .description(getDescription())
                 .permission(getPermission());
 
-        this.getArguments().ifPresent(builder::arguments);
+        builder.arguments(getArguments());
 
         if (this instanceof ParentCommand) {
             for (final Command child : ((ParentCommand) this).getChildren()) {

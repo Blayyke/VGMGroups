@@ -27,8 +27,11 @@ public class CommandChildGroupRelationship extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{GenericArguments.onlyOne(GenericArguments.string(Text.of("name"))), GenericArguments.optional(GenericArguments.string(Text.of("relationship")))});
+    public CommandElement[] getArguments() {
+        return (new CommandElement[]{
+                GenericArguments.onlyOne(GenericArguments.string(Text.of("name"))),
+                GenericArguments.optional(GenericArguments.string(Text.of("relationship")))
+        });
     }
 
     @Nonnull

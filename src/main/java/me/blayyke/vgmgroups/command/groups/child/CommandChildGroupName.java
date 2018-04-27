@@ -30,10 +30,8 @@ public class CommandChildGroupName extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{
-                GenericArguments.remainingJoinedStrings(Text.of("desc"))
-        });
+    public CommandElement[] getArguments() {
+        return new CommandElement[]{GenericArguments.remainingJoinedStrings(Text.of("desc"))};
     }
 
     @Override

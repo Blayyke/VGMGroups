@@ -25,8 +25,8 @@ public class CommandChildGroupJoin extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{GenericArguments.optional(GenericArguments.string(Text.of("name")))});
+    public CommandElement[] getArguments() {
+        return new CommandElement[]{GenericArguments.optional(GenericArguments.string(Text.of("name")))};
     }
 
     @Nonnull

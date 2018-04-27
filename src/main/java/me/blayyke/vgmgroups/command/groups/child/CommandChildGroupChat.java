@@ -24,8 +24,8 @@ public class CommandChildGroupChat extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{GenericArguments.string(Text.of("channel"))});
+    public CommandElement[] getArguments() {
+        return new CommandElement[]{GenericArguments.string(Text.of("channel"))};
     }
 
     @Nonnull

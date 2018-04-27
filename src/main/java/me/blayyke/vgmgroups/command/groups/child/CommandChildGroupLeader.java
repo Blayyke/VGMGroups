@@ -30,10 +30,8 @@ public class CommandChildGroupLeader extends Command {
     }
 
     @Override
-    public Optional<CommandElement[]> getArguments() {
-        return Optional.of(new CommandElement[]{
-                GenericArguments.onlyOne(GenericArguments.player(Text.of("player")))
-        });
+    public CommandElement[] getArguments() {
+        return new CommandElement[]{GenericArguments.onlyOne(GenericArguments.player(Text.of("player")))};
     }
 
     @Override
