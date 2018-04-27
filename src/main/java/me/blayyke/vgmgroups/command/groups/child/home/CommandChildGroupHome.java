@@ -38,7 +38,7 @@ public class CommandChildGroupHome extends Command {
         Location<World> location = group.getHomeWorld().get().getLocation(group.getHome());
 
         Texts.ABOUT_TO_TELEPORT_HOME.sendWithVars(player, DELAY);
-        Sponge.getScheduler().createAsyncExecutor(getPlugin()).schedule(() -> {
+        Sponge.getScheduler().createSyncExecutor(getPlugin()).schedule(() -> {
             if (!player.setLocationSafely(location)) {
                 Texts.CANNOT_TELEPORT_HOME.send(player);
                 return;
