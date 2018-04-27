@@ -254,4 +254,9 @@ public class Group {
         int chunkZ = location.getChunkPosition().getZ();
         claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
     }
+
+    public void setHome(Location<World> location) {
+        this.home = location.getPosition();
+        this.homeWorldUUID = location.getExtent().getUniqueId();
+    }
 }
