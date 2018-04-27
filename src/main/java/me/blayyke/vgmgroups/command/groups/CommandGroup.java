@@ -7,6 +7,8 @@ import me.blayyke.vgmgroups.command.CommandContainer;
 import me.blayyke.vgmgroups.command.groups.child.*;
 import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupRank;
 import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupRelationship;
+import me.blayyke.vgmgroups.command.groups.child.home.CommandChildGroupHome;
+import me.blayyke.vgmgroups.command.groups.child.home.CommandChildGroupSetHome;
 import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nonnull;
@@ -35,7 +37,9 @@ public class CommandGroup extends CommandContainer {
                 new CommandChildGroupName(getPlugin()),
                 new CommandChildGroupMap(getPlugin()),
                 new CommandChildGroupRank(getPlugin()),
-                new CommandChildGroupRelationship(getPlugin())
+                new CommandChildGroupRelationship(getPlugin()),
+                new CommandChildGroupHome(getPlugin()),
+                new CommandChildGroupSetHome(getPlugin())
         );
     }
 
