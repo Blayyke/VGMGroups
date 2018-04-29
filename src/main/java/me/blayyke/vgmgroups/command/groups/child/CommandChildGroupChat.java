@@ -2,8 +2,10 @@ package me.blayyke.vgmgroups.command.groups.child;
 
 import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.enums.Channel;
 import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -39,9 +41,12 @@ public class CommandChildGroupChat extends Command {
         Player player = playersOnly(src);
         Group group = requireGroup(player);
 
-        final String channel = args.<String>getOne("channel")
+        final String channelStr = args.<String>getOne("channel")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "argument missing")));
+        Channel channel = Channel.fromString(channelStr);
 
-        throw new NotImplementedException("chat not implemented");
+        group.setChatChannel(player, channel);
+        Texts.CHANNEL_UPDATED.sendWithVars(player, channel.getFriendlyName());
+        return CommandResult.success();
     }
 }
