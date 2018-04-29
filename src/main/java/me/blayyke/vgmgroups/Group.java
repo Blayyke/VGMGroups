@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import me.blayyke.vgmgroups.enums.Channel;
 import me.blayyke.vgmgroups.enums.Rank;
 import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.manager.GroupManager;
@@ -40,6 +41,8 @@ public class Group {
     private MessageChannel allyChat;
     private MessageChannel truceChat = () -> ImmutableSet.copyOf(Sponge.getGame().getServer().getOnlinePlayers());
     private MessageChannel groupChat = () -> ImmutableSet.copyOf(Sponge.getGame().getServer().getOnlinePlayers());
+
+    private int maxPowerPerPerson = 10;
 
     public Group(UUID ownerUUID, String name) {
         this(ownerUUID, System.currentTimeMillis(), Lists.newArrayList(ownerUUID), name, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(), GroupManager.getInstance().createNewUUID());
@@ -258,5 +261,26 @@ public class Group {
     public void setHome(Location<World> location) {
         this.home = location.getPosition();
         this.homeWorldUUID = location.getExtent().getUniqueId();
+    }
+
+    public void setChatChannel(Player player, Channel channel) {
+        MessageChannel messageChannel = player.getMessageChannel();
+        player.setMessageChannel(MessageChannel.combined(getChat(channel), messageChannel));
+    }
+
+    private MessageChannel getChat(Channel channel) {
+        switch (channel) {
+            case TRUCE:
+                return getTruceChat();
+            case ALLY:
+                return getAllyChat();
+            case GROUP:
+                return getGroupChat();
+        }
+        return null;
+    }
+
+    public int getMaxPower(){
+        return memberUUIDs.size() * maxPowerPerPerson;
     }
 }
