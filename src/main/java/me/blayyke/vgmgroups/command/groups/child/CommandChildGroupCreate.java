@@ -52,7 +52,7 @@ public class CommandChildGroupCreate extends Command {
         manager.createNewGroup(player, name);
 
         Texts.GROUP_CREATED.sendWithVars(player, name);
-        Texts.OTHER_GROUP_CREATED.globalBroadcast();
+        Texts.OTHER_GROUP_CREATED.globalBroadcastWithVars(player.getName(), name);
         return CommandResult.success();
     }
 }
