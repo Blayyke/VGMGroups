@@ -9,9 +9,11 @@ version '0.3.9'
 sourceCompatibility = 1.8
 
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.0.0'
+    compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
 }
