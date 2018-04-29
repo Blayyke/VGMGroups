@@ -1,6 +1,7 @@
 package me.blayyke.vgmgroups.command;
 
 import me.blayyke.vgmgroups.Group;
+import me.blayyke.vgmgroups.Refs;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
@@ -75,19 +76,14 @@ public abstract class Command implements CommandExecutor {
     CommandSpec getCommandSpec() {
         final CommandSpec.Builder builder = CommandSpec.builder()
                 .description(getDescription())
-                .permission(getPermission());
+                .permission(Refs.ID + "." + getPermission());
 
         builder.arguments(getArguments());
 
-        if (this instanceof ParentCommand) {
-            for (final Command child : ((ParentCommand) this).getChildren()) {
-                builder.child(child.getCommandSpec(), child.getAliases());
-            }
-        }
+        if (this instanceof ParentCommand) for (final Command child : ((ParentCommand) this).getChildren())
+            builder.child(child.getCommandSpec(), child.getAliases());
 
-        if (!(this instanceof CommandContainer)) {
-            builder.executor(this);
-        }
+        if (!(this instanceof CommandContainer)) builder.executor(this);
 
         return builder.build();
     }
