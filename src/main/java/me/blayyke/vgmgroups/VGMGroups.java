@@ -22,19 +22,17 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.plugin.PluginContainer;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;
 
-@Plugin(id = Refs.ID, name = Refs.NAME, authors = "Blayyke", description = Refs.DESCRIPTION, version = Refs.VERSION)
+@Plugin(id = Refs.ID, name = Refs.NAME, authors = "Blayyke", description = Refs.DESCRIPTION, version = Refs.VERSION, dependencies = {@Dependency(id = "placeholderapi")})
 public class VGMGroups {
-    @Inject
-    private static PluginContainer pluginContainer;
-
     private static Logger logger = LoggerFactory.getLogger(Refs.NAME);
+    private static VGMGroups plugin;
 
     @Inject
     @DefaultConfig(sharedRoot = true)
@@ -50,6 +48,7 @@ public class VGMGroups {
 
     @Listener
     public void preInit(GamePreInitializationEvent event) throws IOException {
+        plugin = this;
         registerTypeSerializers();
 
         ConfigManager.getInstance().setConfigPath(path);
@@ -112,7 +111,7 @@ public class VGMGroups {
         GroupManager.getInstance().saveGroups();
     }
 
-    public static PluginContainer getPluginContainer() {
-        return pluginContainer;
+    public static VGMGroups getPlugin() {
+        return plugin;
     }
 }
