@@ -57,6 +57,9 @@ public class Texts {
     public static final TextSendable LEADER_RECEIVE = new TextSendable(false, "%s has set you as the new group leader.");
     public static final TextSendable LEADER_SET = new TextSendable(false, "%s is the new group leader.");
 
+    // channel
+    public static final TextSendable CHANNEL_UPDATED = new TextSendable(false, "Your chat channel has been set to %s.");
+
     // chunks
     public static final TextSendable CLAIMED_SELF = new TextSendable(true, "Your group has already claimed this chunk.");
     public static final TextSendable CLAIMED_OTHER = new TextSendable(true, "This chunk is already owned by %s.");
@@ -122,6 +125,14 @@ public class Texts {
          */
         public void globalBroadcast() {
             Sponge.getServer().getBroadcastChannel().send(text);
+        }
+
+        /**
+         * Send this message after formatting to every {@link org.spongepowered.api.entity.living.player.Player} currently online.
+         */
+        public void globalBroadcastWithVars(Object... vars) {
+            String formatted = String.format(text.toPlain(), vars);
+            Sponge.getServer().getBroadcastChannel().send(error ? Text.of(TextColors.RED, formatted) : Text.of(formatted));
         }
     }
 }
