@@ -4,6 +4,7 @@ import me.blayyke.vgmgroups.VGMGroups;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.Sponge;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +18,7 @@ public class ConfigManager {
 
     public void loadConfig() throws IOException {
         if (Files.notExists(configPath))
-            VGMGroups.getPluginContainer().getAsset("default.conf").get().copyToFile(configPath);
+            Sponge.getAssetManager().getAsset(VGMGroups.getPlugin(), "default.conf").get().copyToFile(configPath);
         rootNode = loader.load();
     }
 
