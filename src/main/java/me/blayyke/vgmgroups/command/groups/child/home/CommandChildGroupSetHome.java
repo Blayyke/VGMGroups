@@ -29,12 +29,6 @@ public class CommandChildGroupSetHome extends Command {
         return "sethome";
     }
 
-    @Nonnull
-    @Override
-    protected CommandElement[] getArguments() {
-        return new CommandElement[]{};
-    }
-
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
