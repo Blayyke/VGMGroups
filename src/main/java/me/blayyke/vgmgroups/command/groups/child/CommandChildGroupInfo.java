@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class CommandChildGroupInfo extends Command {
     public CommandChildGroupInfo(VGMGroups plugin) {
-        super(plugin, Lists.newArrayList("info"), Text.of("View yours or another groups stats / info."));
+        super(plugin, Lists.newArrayList("info", "i", "g", "group"), Text.of("View yours or another groups stats / info."));
     }
 
     @Override
@@ -41,6 +41,7 @@ public class CommandChildGroupInfo extends Command {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
         Optional<String> nameOpt = args.getOne("name");
+
         if (nameOpt.isPresent()) {
             String name = nameOpt.get();
             Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
