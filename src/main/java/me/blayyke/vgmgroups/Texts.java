@@ -65,6 +65,7 @@ public class Texts {
     public static final TextSendable CLAIMED_OTHER = new TextSendable(true, "This chunk is already owned by %s.");
     public static final TextSendable CLAIM_SUCCESS = new TextSendable(false, "You now own the chunk at %s, %s.");
     public static final TextSendable CHUNK_NOT_OWNED = new TextSendable(true, "You do not own this chunk.");
+    public static final TextSendable ALREADY_TELEPORTING = new TextSendable(true, "You have already initiated a teleport!");
 
     public static class TextSendable {
         private final Text text;
