@@ -7,11 +7,15 @@ import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.event.GroupCreateEvent;
+import me.blayyke.vgmgroups.event.GroupDeleteEvent;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
@@ -74,6 +78,15 @@ public class GroupManager {
     }
 
     public void deleteGroup(Group group) {
+        EventContext context = EventContext.builder()
+                .add(EventContextKeys.PLAYER, group.getOwner())
+                .build();
+        Cause cause = Cause.builder()
+                .append(group.getOwner())
+                .append(group)
+                .append(VGMGroups.getPlugin())
+                .build(context);
+        if (Sponge.getEventManager().post(new GroupDeleteEvent(group.getOwner(), group, cause))) return;
         groups.remove(group);
         getGroupFile(group).delete();
         VGMGroups.getLogger().info("Deleted group " + group.getUUID());
@@ -113,7 +126,15 @@ public class GroupManager {
     public void createNewGroup(Player player, String name) {
         Group group = new Group(player.getUniqueId(), name);
 
-        Sponge.getEventManager().post(new GroupCreateEvent(player, group));
+        EventContext context = EventContext.builder()
+                .add(EventContextKeys.PLAYER, player)
+                .build();
+        Cause cause = Cause.builder()
+                .append(player)
+                .append(group)
+                .append(VGMGroups.getPlugin())
+                .build(context);
+        if (Sponge.getEventManager().post(new GroupCreateEvent(player, group, cause))) return;
 
         try {
             saveGroup(group);
