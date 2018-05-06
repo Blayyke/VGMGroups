@@ -7,10 +7,10 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
-public class RankSerializer implements TypeSerializer<Rank> {
+public class RankSerializer extends XTypeSerializer<Rank> {
     @Override
     public Rank deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-            return Rank.fromString(value.getNode("Rank").getString());
+        return Rank.fromString(value.getNode("Rank").getString());
     }
 
     @Override

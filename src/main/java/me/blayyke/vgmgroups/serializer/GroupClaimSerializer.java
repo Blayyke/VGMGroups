@@ -4,11 +4,10 @@ import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.GroupClaim;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
 import java.util.UUID;
 
-public class GroupClaimSerializer implements TypeSerializer<GroupClaim> {
+public class GroupClaimSerializer extends XTypeSerializer<GroupClaim> {
     @Override
     public GroupClaim deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         int x = value.getNode("x").getInt();

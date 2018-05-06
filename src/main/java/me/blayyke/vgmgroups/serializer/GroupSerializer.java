@@ -8,12 +8,11 @@ import me.blayyke.vgmgroups.GroupRank;
 import me.blayyke.vgmgroups.GroupRelationship;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
 import java.util.List;
 import java.util.UUID;
 
-public class GroupSerializer implements TypeSerializer<Group> {
+public class GroupSerializer extends XTypeSerializer<Group> {
     @Override
     public Group deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         long creationTime = value.getNode("Created At").getLong();
@@ -43,20 +42,16 @@ public class GroupSerializer implements TypeSerializer<Group> {
         value.getNode("UUID").setValue(TypeToken.of(UUID.class), group.getUUID());
         value.getNode("Owner UUID").setValue(TypeToken.of(UUID.class), group.getOwnerUUID());
         value.getNode("Home World").setValue(TypeToken.of(UUID.class), group.getHomeWorldUUID());
-        value.getNode("Members").setValue(new TypeToken<List<UUID>>() {
-        }, group.getMemberUUIDs());
-        value.getNode("Invited").setValue(new TypeToken<List<UUID>>() {
-        }, group.getInvitedUUIDs());
+        value.getNode("Members").setValue(listTokenType(), group.getMemberUUIDs());
+        value.getNode("Invited").setValue(listTokenType(), group.getInvitedUUIDs());
         value.getNode("Name").setValue(TypeToken.of(String.class), group.getName());
         value.getNode("Description").setValue(TypeToken.of(String.class), group.getDescription());
 
-        value.getNode("Relationships").setValue(new TypeToken<List<GroupRelationship>>() {
-        }, group.getRelationships());
-        value.getNode("Ranks").setValue(new TypeToken<List<GroupRank>>() {
-        }, group.getRanks());
+        value.getNode("Relationships").setValue(listTokenType(), group.getRelationships());
+        value.getNode("Relationships").setValue(listTokenType(), group.getRelationships());
+        value.getNode("Ranks").setValue(listTokenType(), group.getRanks());
 
-        value.getNode("Land").setValue(new TypeToken<List<GroupClaim>>() {
-        }, group.getClaims());
+        value.getNode("Land").setValue(listTokenType(), group.getClaims());
         value.getNode("Home").setValue(TypeToken.of(Vector3d.class), group.getHome());
     }
 }

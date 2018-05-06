@@ -9,7 +9,7 @@ import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
 import java.util.UUID;
 
-public class GroupRankSerializer implements TypeSerializer<GroupRank> {
+public class GroupRankSerializer extends XTypeSerializer<GroupRank> {
     @Override
     public GroupRank deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         UUID memberUUID = value.getNode("Member").getValue(TypeToken.of(UUID.class));
