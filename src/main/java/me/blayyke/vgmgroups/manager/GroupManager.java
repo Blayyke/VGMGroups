@@ -6,11 +6,12 @@ import com.google.common.reflect.TypeToken;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.VGMGroups;
 import me.blayyke.vgmgroups.enums.Relationship;
+import me.blayyke.vgmgroups.event.GroupCreateEvent;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
@@ -109,15 +110,17 @@ public class GroupManager {
         return instance;
     }
 
-    public Group createNewGroup(Player player, String name) {
+    public void createNewGroup(Player player, String name) {
         Group group = new Group(player.getUniqueId(), name);
+
+        Sponge.getEventManager().post(new GroupCreateEvent(player, group));
+
         try {
             saveGroup(group);
         } catch (IOException | ObjectMappingException e) {
             throw new RuntimeException("Failed to save group " + group.getName(), e);
         }
         groups.add(group);
-        return group;
     }
 
     public UUID createNewUUID() {
