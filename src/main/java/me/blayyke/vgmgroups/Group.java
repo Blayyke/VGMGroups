@@ -7,11 +7,15 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.enums.Channel;
 import me.blayyke.vgmgroups.enums.Rank;
 import me.blayyke.vgmgroups.enums.Relationship;
+import me.blayyke.vgmgroups.event.GroupMemberInviteEvent;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
@@ -170,7 +174,18 @@ public class Group {
         return memberUUIDs.contains(target.getUniqueId());
     }
 
-    public void addInvited(Player target) {
+    public void invitePlayer(Player inviter, Player target) {
+        EventContext context = EventContext.builder()
+                .add(EventContextKeys.PLAYER, inviter)
+                .add(EventContextKeys.PLAYER, target)
+                .build();
+        Cause cause = Cause.builder()
+                .append(target).append(inviter)
+                .append(this)
+                .append(VGMGroups.getPlugin())
+                .build(context);
+        Sponge.getEventManager().post(new GroupMemberInviteEvent(inviter, this, cause, target));
+
         invitedUUIDs.add(target.getUniqueId());
     }
 
@@ -280,7 +295,7 @@ public class Group {
         return null;
     }
 
-    public int getMaxPower(){
+    public int getMaxPower() {
         return memberUUIDs.size() * maxPowerPerPerson;
     }
 }

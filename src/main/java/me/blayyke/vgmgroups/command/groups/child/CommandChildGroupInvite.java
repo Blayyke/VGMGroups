@@ -16,7 +16,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 public class CommandChildGroupInvite extends Command {
     public CommandChildGroupInvite(VGMGroups plugin) {
@@ -58,7 +57,7 @@ public class CommandChildGroupInvite extends Command {
             return CommandResult.success();
         }
         Texts.INVITATION_SENT.broadcastWithVars(group, target.getName());
-        group.addInvited(target);
+        group.invitePlayer(player, target);
         Texts.INVITATION_RECEIVED.sendWithVars(target, group.getName(), player.getName());
 
         return CommandResult.success();
