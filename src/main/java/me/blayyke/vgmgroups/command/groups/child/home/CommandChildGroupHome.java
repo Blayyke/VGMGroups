@@ -16,10 +16,14 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class CommandChildGroupHome extends Command {
     private static final long DELAY = 10;
+    private List<UUID> waitingForTeleport = new ArrayList<>();
 
     public CommandChildGroupHome(@Nonnull VGMGroups plugin) {
         super(plugin, Lists.newArrayList("home"), Text.of("Go to your groups home."));
@@ -37,12 +41,19 @@ public class CommandChildGroupHome extends Command {
         Group group = requireGroup(player);
         Location<World> location = group.getHomeWorld().get().getLocation(group.getHome());
 
+        if (waitingForTeleport.contains(player.getUniqueId())) {
+            Texts.ALREADY_TELEPORTING.send(player);
+            return CommandResult.empty();
+        }
+
+        waitingForTeleport.add(player.getUniqueId());
         Texts.ABOUT_TO_TELEPORT_HOME.sendWithVars(player, DELAY);
         Sponge.getScheduler().createSyncExecutor(getPlugin()).schedule(() -> {
             if (!player.setLocationSafely(location)) {
                 Texts.CANNOT_TELEPORT_HOME.send(player);
                 return;
             }
+            waitingForTeleport.remove(player.getUniqueId());
             Texts.TELEPORT_HOME.send(player);
         }, DELAY, TimeUnit.SECONDS);
         return CommandResult.success();
