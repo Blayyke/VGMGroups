@@ -52,7 +52,7 @@ public class CommandChildGroupName extends Command {
         }
 
         if (name.length() < minNameLength) {
-            Texts.NAME_TOO_LONG.send(player);
+            Texts.NAME_TOO_SHORT.send(player);
             return CommandResult.empty();
         }
 
