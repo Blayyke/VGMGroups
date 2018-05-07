@@ -41,9 +41,13 @@ public class CommandChildGroupClaim extends Command {
         }
 
         if (groupForChunk == null) {
-            group.claimChunk(location);
-            Texts.CLAIM_SUCCESS.sendWithVars(player, location.getChunkPosition().getX(), location.getChunkPosition().getZ());
-            return CommandResult.success();
+            if (group.claimChunk(location)) {
+                Texts.CLAIM_SUCCESS.sendWithVars(player, location.getChunkPosition().getX(), location.getChunkPosition().getZ());
+                return CommandResult.success();
+            } else {
+                Texts.CLAIM_FAILURE.send(player);
+                return CommandResult.empty();
+            }
         }
         if (group.equals(groupForChunk)) {
             Texts.CLAIMED_SELF.send(player);

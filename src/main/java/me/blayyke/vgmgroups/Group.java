@@ -248,10 +248,6 @@ public class Group {
         return players;
     }
 
-    public void broadcastMessage(Text text) {
-        for (Player player : getOnlineMembers()) player.sendMessage(text);
-    }
-
     public long getCreationTime() {
         return creationTime;
     }
@@ -267,10 +263,23 @@ public class Group {
         return false;
     }
 
-    public void claimChunk(Location<World> location) {
+    /**
+     * Claim a chunk at the provided {@link Location}
+     *
+     * @param location Location for claim
+     * @return Whether or not the claim was successful
+     */
+    public boolean claimChunk(Location<World> location) {
+        if (!canClaimMore()) return false;
+
         int chunkX = location.getChunkPosition().getX();
         int chunkZ = location.getChunkPosition().getZ();
         claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
+        return true;
+    }
+
+    private boolean canClaimMore() {
+        return claims.size() < getMaxPower();
     }
 
     public void setHome(Location<World> location) {

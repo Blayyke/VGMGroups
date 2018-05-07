@@ -39,6 +39,7 @@ public class Texts {
     public static final TextSendable TELEPORT_HOME = new TextSendable(false, "You have been teleported to your group home.");
     public static final TextSendable ABOUT_TO_TELEPORT_HOME = new TextSendable(false, "You will be teleported to your group home in %s seconds.");
     public static final TextSendable HOME_SET = new TextSendable(false, "The group home has been updated. Position: X=%s, Y=%s, Z=%s in world %s.");
+    public static final TextSendable ALREADY_TELEPORTING = new TextSendable(true, "You have already initiated a teleport!");
 
     // ranks
     public static final TextSendable CANNOT_CHANGE_OWNER_RANK = new TextSendable(true, "Cannot change rank for owner!");
@@ -67,8 +68,8 @@ public class Texts {
     public static final TextSendable CLAIMED_SELF = new TextSendable(true, "Your group has already claimed this chunk.");
     public static final TextSendable CLAIMED_OTHER = new TextSendable(true, "This chunk is already owned by %s.");
     public static final TextSendable CLAIM_SUCCESS = new TextSendable(false, "You now own the chunk at %s, %s.");
+    public static final TextSendable CLAIM_FAILURE = new TextSendable(true, "Could not claim this area as you have reached your claim limit!");
     public static final TextSendable CHUNK_NOT_OWNED = new TextSendable(true, "You do not own this chunk.");
-    public static final TextSendable ALREADY_TELEPORTING = new TextSendable(true, "You have already initiated a teleport!");
 
     public static class TextSendable {
         private final Text text;
