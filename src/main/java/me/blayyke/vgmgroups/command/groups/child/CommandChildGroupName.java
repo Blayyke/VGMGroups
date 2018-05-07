@@ -16,9 +16,13 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class CommandChildGroupName extends Command {
+    private int minNameLength = 2; //todo read from config
+    private int maxNameLength = 16; //todo read from config
+    private Pattern nameRegex = Pattern.compile("^[a-zA-Z0-9_-]*$"); //todo read from config
+
     public CommandChildGroupName(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("name", "n"), Text.of("Set the name for your group."));
     }
@@ -41,6 +45,21 @@ public class CommandChildGroupName extends Command {
 
         final String name = args.<String>getOne("desc")
                 .orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Missing argument")));
+
+        if (name.length() > maxNameLength) {
+            Texts.NAME_TOO_LONG.send(player);
+            return CommandResult.empty();
+        }
+
+        if (name.length() < minNameLength) {
+            Texts.NAME_TOO_LONG.send(player);
+            return CommandResult.empty();
+        }
+
+        if (!nameRegex.matcher(name).matches()) {
+            Texts.INVALID_NAME.send(player);
+            return CommandResult.empty();
+        }
 
         group.setName(name);
         Texts.NAME_UPDATED.broadcastWithVars(group, name);
