@@ -30,6 +30,9 @@ public class Texts {
 
     // name
     public static final TextSendable NAME_UPDATED = new TextSendable(false, "Your groups name has been changed to %s.");
+    public static final TextSendable INVALID_NAME = new TextSendable(true, "That name is invalid. Group names may only contain letters, numbers and underscores (_).");
+    public static final TextSendable NAME_TOO_LONG = new TextSendable(true, "That name is too long. Max length: %s.");
+    public static final TextSendable NAME_TOO_SHORT = new TextSendable(true, "That name is too short. Min length: %s.");
 
     // home
     public static final TextSendable CANNOT_TELEPORT_HOME = new TextSendable(true, "Could not teleport you to your group home safely.");
