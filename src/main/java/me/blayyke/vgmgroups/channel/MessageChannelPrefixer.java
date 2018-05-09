@@ -3,9 +3,11 @@ package me.blayyke.vgmgroups.channel;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.GroupRelationship;
 import me.blayyke.vgmgroups.VGMGroups;
+import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupInfo;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.chat.ChatType;
@@ -75,7 +77,12 @@ public class MessageChannelPrefixer implements MessageChannel {
         }
         // colour is set now, proceed with message
 
-        Text prefix = Text.of(prefixColour, "[" + senderGroupOpt.get().getName() + "]");
+        Text prefix = Text.builder()
+                .onHover(TextActions.showText(CommandChildGroupInfo.getGroupInfo(senderGroup)))
+                .color(prefixColour)
+                .append(Text.of("[" + senderGroupOpt.get().getName() + "]"))
+                .color(TextColors.RESET)
+                .build();
         Text finalText = Text.join(prefix, original);
         return Optional.of(finalText);
     }
