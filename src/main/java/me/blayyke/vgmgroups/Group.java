@@ -147,16 +147,12 @@ public class Group {
     }
 
     public Optional<GroupRelationship> getRelationshipWith(Group target) {
-        return relationships.stream().filter(groupRelationship -> groupRelationship.getTargetGroupUUID().equals(target)).findFirst();
+        return relationships.stream().filter(groupRelationship -> groupRelationship.getTargetGroupUUID().equals(target.getUUID())).findFirst();
     }
 
     private void removeRelationshipIfPresent(Group target) {
         Optional<GroupRelationship> prevRelationship = getRelationshipWith(target);
         prevRelationship.ifPresent(groupRelationship -> relationships.remove(groupRelationship));
-    }
-
-    public void addMember(Player player) {
-        memberUUIDs.add(player.getUniqueId());
     }
 
     public void removeMember(Player player) {
@@ -234,6 +230,7 @@ public class Group {
     }
 
     public void playerJoin(Player player) {
+        invitedUUIDs.remove(player.getUniqueId());
         memberUUIDs.add(player.getUniqueId());
     }
 
@@ -252,7 +249,7 @@ public class Group {
         return creationTime;
     }
 
-    public void removeInvited(UUID uniqueId) {
+    public void revokeInvite(UUID uniqueId) {
         invitedUUIDs.remove(uniqueId);
     }
 
