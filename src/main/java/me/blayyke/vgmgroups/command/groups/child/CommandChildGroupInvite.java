@@ -53,7 +53,7 @@ public class CommandChildGroupInvite extends Command {
 
         if (group.isInvited(target.getUniqueId())) {
             Texts.INVITATION_REVOKED.sendWithVars(player, target.getName());
-            group.removeInvited(target.getUniqueId());
+            group.revokeInvite(target.getUniqueId());
             return CommandResult.success();
         }
         Texts.INVITATION_SENT.broadcastWithVars(group, target.getName());
