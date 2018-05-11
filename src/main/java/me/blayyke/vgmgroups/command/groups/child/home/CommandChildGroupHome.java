@@ -18,6 +18,7 @@ import org.spongepowered.api.world.World;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +40,12 @@ public class CommandChildGroupHome extends Command {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Player player = playersOnly(src);
         Group group = requireGroup(player);
-        Location<World> location = group.getHomeWorld().get().getLocation(group.getHome());
+        Optional<World> worldOpt = group.getHomeWorld();
+        if (!worldOpt.isPresent() || group.getHome() == null) {
+            Texts.NO_HOME_SET.send(player);
+            return CommandResult.empty();
+        }
+        Location<World> location = worldOpt.get().getLocation(group.getHome());
 
         if (waitingForTeleport.contains(player.getUniqueId())) {
             Texts.ALREADY_TELEPORTING.send(player);
