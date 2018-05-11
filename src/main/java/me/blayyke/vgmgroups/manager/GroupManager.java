@@ -112,8 +112,6 @@ public class GroupManager {
         HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
         ConfigurationNode rootNode = loader.load();
 
-        System.out.println(group.toString());
-
         rootNode.setValue(TypeToken.of(Group.class), group);
         loader.save(rootNode);
     }
