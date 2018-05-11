@@ -39,6 +39,7 @@ public class Texts {
     public static final TextSendable TELEPORT_HOME = new TextSendable(false, "You have been teleported to your group home.");
     public static final TextSendable ABOUT_TO_TELEPORT_HOME = new TextSendable(false, "You will be teleported to your group home in %s seconds.");
     public static final TextSendable HOME_SET = new TextSendable(false, "The group home has been updated. Position: X=%s, Y=%s, Z=%s in world %s.");
+    public static final TextSendable NO_HOME_SET = new TextSendable(true, "Your group has no home set.");
     public static final TextSendable ALREADY_TELEPORTING = new TextSendable(true, "You have already initiated a teleport!");
 
     // ranks
