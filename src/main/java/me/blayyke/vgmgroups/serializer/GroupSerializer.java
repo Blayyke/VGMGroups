@@ -42,16 +42,15 @@ public class GroupSerializer extends XTypeSerializer<Group> {
         value.getNode("UUID").setValue(TypeToken.of(UUID.class), group.getUUID());
         value.getNode("Owner UUID").setValue(TypeToken.of(UUID.class), group.getOwnerUUID());
         value.getNode("Home World").setValue(TypeToken.of(UUID.class), group.getHomeWorldUUID());
-        value.getNode("Members").setValue(listTokenType(), group.getMemberUUIDs());
-        value.getNode("Invited").setValue(listTokenType(), group.getInvitedUUIDs());
+        value.getNode("Members").setValue(listTypeToken(UUID.class), group.getMemberUUIDs());
+        value.getNode("Invited").setValue(listTypeToken(UUID.class), group.getInvitedUUIDs());
         value.getNode("Name").setValue(TypeToken.of(String.class), group.getName());
         value.getNode("Description").setValue(TypeToken.of(String.class), group.getDescription());
 
-        value.getNode("Relationships").setValue(listTokenType(), group.getRelationships());
-        value.getNode("Relationships").setValue(listTokenType(), group.getRelationships());
-        value.getNode("Ranks").setValue(listTokenType(), group.getRanks());
+        value.getNode("Relationships").setValue(listTypeToken(GroupRelationship.class), group.getRelationships());
+        value.getNode("Ranks").setValue(listTypeToken(GroupRank.class), group.getRanks());
 
-        value.getNode("Land").setValue(listTokenType(), group.getClaims());
+        value.getNode("Land").setValue(listTypeToken(GroupClaim.class), group.getClaims());
         value.getNode("Home").setValue(TypeToken.of(Vector3d.class), group.getHome());
     }
 }
