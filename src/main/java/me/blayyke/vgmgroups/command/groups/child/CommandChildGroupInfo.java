@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -21,7 +21,7 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupInfo extends Command {
+public class CommandChildGroupInfo extends ChildCommand {
     public CommandChildGroupInfo(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("info", "i", "g", "group"), Text.of("View yours or another groups stats / info."));
     }

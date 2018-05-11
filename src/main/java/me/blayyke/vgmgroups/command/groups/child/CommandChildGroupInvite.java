@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -17,7 +17,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
 
-public class CommandChildGroupInvite extends Command {
+public class CommandChildGroupInvite extends ChildCommand {
     public CommandChildGroupInvite(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("invite", "add"), Text.of("Invite people to your group."));
     }

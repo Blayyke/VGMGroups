@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -16,9 +16,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
-public class CommandChildGroupLeader extends Command {
+public class CommandChildGroupLeader extends ChildCommand {
     public CommandChildGroupLeader(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("leader", "owner"), Text.of("Pass on ownership of your group."));
     }

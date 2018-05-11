@@ -2,7 +2,7 @@ package me.blayyke.vgmgroups.command.groups;
 
 import com.google.common.collect.Sets;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.command.CommandContainer;
 import me.blayyke.vgmgroups.command.groups.child.*;
 import me.blayyke.vgmgroups.command.groups.child.CommandChildGroupRank;
@@ -22,7 +22,7 @@ public class CommandGroup extends CommandContainer {
 
     @Nonnull
     @Override
-    protected Set<Command> registerChildren() {
+    protected Set<ChildCommand> registerChildren() {
         return Sets.newHashSet(
                 new CommandChildGroupChat(getPlugin()),
                 new CommandChildGroupClaim(getPlugin()),

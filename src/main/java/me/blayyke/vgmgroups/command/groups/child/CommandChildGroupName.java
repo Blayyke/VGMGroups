@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -18,7 +18,7 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
-public class CommandChildGroupName extends Command {
+public class CommandChildGroupName extends ChildCommand {
     private int minNameLength = 2; //todo read from config
     private int maxNameLength = 16; //todo read from config
     private Pattern nameRegex = Pattern.compile("^[a-zA-Z0-9_-]*$"); //todo read from config

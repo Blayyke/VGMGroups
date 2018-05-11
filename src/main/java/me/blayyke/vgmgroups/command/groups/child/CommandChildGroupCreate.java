@@ -4,9 +4,8 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.manager.GroupManager;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -20,7 +19,7 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupCreate extends Command {
+public class CommandChildGroupCreate extends ChildCommand {
     public CommandChildGroupCreate(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("create"), Text.of("Create a group."));
     }

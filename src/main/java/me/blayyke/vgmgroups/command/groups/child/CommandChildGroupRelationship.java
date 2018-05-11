@@ -5,7 +5,7 @@ import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.GroupRelationship;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
@@ -21,7 +21,7 @@ import org.spongepowered.api.text.Text;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupRelationship extends Command {
+public class CommandChildGroupRelationship extends ChildCommand {
     public CommandChildGroupRelationship(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("relationship"), Text.of("Change or view your relationship with another group."));
     }

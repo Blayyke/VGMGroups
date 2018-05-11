@@ -4,13 +4,12 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
@@ -18,7 +17,7 @@ import org.spongepowered.api.world.World;
 
 import javax.annotation.Nonnull;
 
-public class CommandChildGroupSetHome extends Command {
+public class CommandChildGroupSetHome extends ChildCommand {
     public CommandChildGroupSetHome(@Nonnull VGMGroups plugin) {
         super(plugin, Lists.newArrayList("sethome"), Text.of("Update your groups home."));
     }

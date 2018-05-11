@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.GroupRelationship;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.enums.Relationship;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CommandChildGroupMap extends Command {
+public class CommandChildGroupMap extends ChildCommand {
     public CommandChildGroupMap(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("map"), Text.of("View nearby group claims."));
     }

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -19,7 +19,7 @@ import org.spongepowered.api.text.Text;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupJoin extends Command {
+public class CommandChildGroupJoin extends ChildCommand {
     public CommandChildGroupJoin(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("join"), Text.of("Join a group you have been invited to."));
     }

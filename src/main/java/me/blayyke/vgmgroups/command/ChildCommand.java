@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Command implements CommandExecutor {
+public abstract class ChildCommand implements CommandExecutor {
     @Nonnull
     private final VGMGroups plugin;
     @Nonnull
@@ -25,9 +25,9 @@ public abstract class Command implements CommandExecutor {
     @Nonnull
     private final Text description;
 
-    protected Command(@Nonnull final VGMGroups plugin,
-                      @Nonnull final List<String> aliases,
-                      @Nonnull final Text description) {
+    protected ChildCommand(@Nonnull final VGMGroups plugin,
+                           @Nonnull final List<String> aliases,
+                           @Nonnull final Text description) {
         if (aliases.isEmpty()) throw new IllegalArgumentException("aliases may not be empty");
 
         this.plugin = plugin;
@@ -80,7 +80,7 @@ public abstract class Command implements CommandExecutor {
 
         builder.arguments(getArguments());
 
-        if (this instanceof ParentCommand) for (final Command child : ((ParentCommand) this).getChildren())
+        if (this instanceof ParentCommand) for (final ChildCommand child : ((ParentCommand) this).getChildren())
             builder.child(child.getCommandSpec(), child.getAliases());
 
         if (!(this instanceof CommandContainer)) builder.executor(this);

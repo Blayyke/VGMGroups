@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.manager.GroupManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -17,7 +17,7 @@ import org.spongepowered.api.world.World;
 
 import javax.annotation.Nonnull;
 
-public class CommandChildGroupClaim extends Command {
+public class CommandChildGroupClaim extends ChildCommand {
     public CommandChildGroupClaim(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("claim"), Text.of("Claim a chunk."));
     }

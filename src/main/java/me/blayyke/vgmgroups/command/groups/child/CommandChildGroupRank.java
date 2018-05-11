@@ -5,7 +5,7 @@ import me.blayyke.vgmgroups.Group;
 import me.blayyke.vgmgroups.GroupRank;
 import me.blayyke.vgmgroups.Texts;
 import me.blayyke.vgmgroups.VGMGroups;
-import me.blayyke.vgmgroups.command.Command;
+import me.blayyke.vgmgroups.command.ChildCommand;
 import me.blayyke.vgmgroups.enums.Rank;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -19,7 +19,7 @@ import org.spongepowered.api.text.Text;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class CommandChildGroupRank extends Command {
+public class CommandChildGroupRank extends ChildCommand {
     public CommandChildGroupRank(VGMGroups plugin) {
         super(plugin, Lists.newArrayList("rank"), Text.of("Change or view a group member's rank."));
     }

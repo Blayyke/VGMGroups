@@ -8,8 +8,8 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ParentCommand extends Command {
-    private Set<Command> children;
+public abstract class ParentCommand extends ChildCommand {
+    private Set<ChildCommand> children;
 
     ParentCommand(@Nonnull final VGMGroups plugin,
                   @Nonnull final List<String> aliases,
@@ -20,13 +20,13 @@ public abstract class ParentCommand extends Command {
     }
 
     @Nonnull
-    Set<Command> getChildren() {
+    Set<ChildCommand> getChildren() {
         if (this.children == null) this.children = registerChildren();
         return this.children;
     }
 
     @Nonnull
-    protected abstract Set<Command> registerChildren();
+    protected abstract Set<ChildCommand> registerChildren();
 
     public void register() {
         Sponge.getCommandManager().register(this.getPlugin(), this.getCommandSpec(), this.getAliases());
