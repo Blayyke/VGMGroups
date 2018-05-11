@@ -14,10 +14,13 @@ public class Texts {
     public static final TextSendable PLAYER_NO_GROUP = new TextSendable(true, "That player is not in a group.");
     public static final TextSendable ALREADY_IN_GROUP = new TextSendable(true, "You are already in a group!");
     public static final TextSendable INPUT_NOT_FOUND = new TextSendable(true, "Nothing was found with your input.");
+    public static final TextSendable OWNER_CANNOT_RUN = new TextSendable(true, "As you are the owner of the group, you cannot do this.");
 
     // major group events
     public static final TextSendable GROUP_CREATED = new TextSendable(false, "Successfully created group %s. Set the description with /g desc <description>");
     public static final TextSendable GROUP_DISBANDED = new TextSendable(false, "Your group has been disbanded.");
+    public static final TextSendable GROUP_LEFT = new TextSendable(false, "You have left your group.");
+    public static final TextSendable BROADCAST_GROUP_LEFT = new TextSendable(false, "%s have left your group!");
     public static final TextSendable OTHER_GROUP_CREATED = new TextSendable(false, "%s has created the group %s.");
 
     // joining
