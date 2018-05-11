@@ -84,7 +84,7 @@ public class CommandChildGroupRelationship extends ChildCommand {
 
                 error(Text.of("Invalid relationship setting. Valid settings are: " + relationshipStr.substring(0, relationshipStr.length() - 2)));
             }
-            group.setRelationshipWith(target, relationship);
+            GroupManager.getInstance().updateRelationship(group, target, relationship);
             Texts.RELATIONSHIP_UPDATE.broadcastWithVars(group, target.getName(), relationship.getFriendlyName());
             Texts.RELATIONSHIP_UPDATE_RECEIVE.broadcastWithVars(target, group.getName(), relationship.getFriendlyName());
             return CommandResult.success();
