@@ -56,7 +56,7 @@ public class CommandChildGroupMap extends ChildCommand {
         String playerFaction = "";
 
         //Map resolution
-        int mapWidth = 20;
+        int mapWidth = 16;
         int mapHeight = 8;
 
         //Half map resolution + 1 (for player column/row in the center)
@@ -135,9 +135,9 @@ public class CommandChildGroupMap extends ChildCommand {
             playerPositionClaim = GroupManager.getInstance().getGroupForChunk(world, chunkPosition).getName();
 
         //Print map
-        player.sendMessage(Text.of(TextColors.GREEN, "===========Group Map============"));
+        player.sendMessage(Text.of(TextColors.GREEN, "========Group Map========="));
         map.stream().map(Text::of).forEach(player::sendMessage);
-        player.sendMessage(Text.of(TextColors.GREEN, "==============================="));
+        player.sendMessage(Text.of(TextColors.GREEN, "========================="));
 
         //Print factions on map
         if (!playerFaction.isEmpty())
