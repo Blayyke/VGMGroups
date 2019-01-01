@@ -70,7 +70,7 @@ public class Texts {
 
     // chunks
     public static final TextSendable CLAIMED_SELF = new TextSendable(true, "Your group has already claimed this chunk.");
-    public static final TextSendable CLAIMED_OTHER = new TextSendable(true, "This chunk is already owned by %s.");
+    public static final TextSendable CLAIMED_OTHER = new TextSendable(true, "This chunk is owned by %s.");
     public static final TextSendable CLAIM_SUCCESS = new TextSendable(false, "You now own the chunk at %s, %s.");
     public static final TextSendable CLAIM_FAILURE = new TextSendable(true, "Could not claim this area as you have reached your claim limit!");
     public static final TextSendable CHUNK_NOT_OWNED = new TextSendable(true, "You do not own this chunk.");
