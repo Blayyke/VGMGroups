@@ -74,6 +74,7 @@ public class Texts {
     public static final TextSendable CLAIM_SUCCESS = new TextSendable(false, "You now own the chunk at %s, %s.");
     public static final TextSendable CLAIM_FAILURE = new TextSendable(true, "Could not claim this area as you have reached your claim limit!");
     public static final TextSendable CHUNK_NOT_OWNED = new TextSendable(true, "You do not own this chunk.");
+    public static final TextSendable UNCLAIM_SUCCESS = new TextSendable(false, "You no longer own the chunk at %s, %s.");
 
     public static class TextSendable {
         private final Text text;
