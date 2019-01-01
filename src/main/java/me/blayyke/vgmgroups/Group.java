@@ -238,6 +238,7 @@ public class Group {
         return invitedUUIDs.contains(uniqueId);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public List<Player> getOnlineMembers() {
         List<User> collect = getMembers().stream().filter(User::isOnline).collect(Collectors.toList());
         List<Player> players = new ArrayList<>(collect.size());
@@ -272,6 +273,8 @@ public class Group {
         int chunkX = location.getChunkPosition().getX();
         int chunkZ = location.getChunkPosition().getZ();
         claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
+
+        GroupManager.getInstance().saveGroup(this);
         return true;
     }
 
