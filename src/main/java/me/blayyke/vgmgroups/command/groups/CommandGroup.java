@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class CommandGroup extends CommandContainer {
     public CommandGroup(VGMGroups plugin) {
-        super(plugin, Arrays.asList("group", "groups", "g"), Text.of("Base command"));
+        super(plugin, Arrays.asList("group", "groups", "g", "fac", "faction", "factions", "f"), Text.of("Base command"));
     }
 
     @Nonnull
