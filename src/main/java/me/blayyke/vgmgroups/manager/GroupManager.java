@@ -48,19 +48,18 @@ public class GroupManager {
     }
 
     public void loadGroups() throws IOException, ObjectMappingException {
-        System.out.println("Loading groups");
+        System.out.println("Attempting to load groups from disk");
         groups = new ArrayList<>();
-        System.out.println("List init");
+
         File[] files = DataManager.getInstance().getGroupsDir().listFiles();
-        System.out.println("ListFiles stored");
         if (files == null) {
-            System.out.println("ListFiles null");
+            System.out.println("Groups dir has no children files, no groups exist.");
             return;
         }
 
         for (File file : files) {
             if (!Files.getFileExtension(file.getName()).equalsIgnoreCase(fileExtension)) {
-                System.out.println("File " + file.getName() + " does not match extension " + fileExtension + ". Continuing");
+                System.out.println(String.format("File %s does not match extension %s skipping file.", file.getName(), fileExtension));
                 continue;
             }
 
