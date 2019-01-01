@@ -49,7 +49,7 @@ public class CommandChildGroupJoin extends ChildCommand {
         Optional<Player> targetOpt = Sponge.getServer().getPlayer(name);
         if (targetOpt.isPresent()) {
             Player target = targetOpt.get();
-            Optional<Group> targetGroupOpt = GroupManager.getInstance().getGroupByUUID(target.getUniqueId());
+            Optional<Group> targetGroupOpt = GroupManager.getInstance().getPlayerGroup(target);
             if (targetGroupOpt.isPresent()) {
                 Group targetGroup = targetGroupOpt.get();
                 attemptJoinGroup(player, targetGroup);
