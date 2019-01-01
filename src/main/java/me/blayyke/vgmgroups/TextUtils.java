@@ -2,7 +2,7 @@ package me.blayyke.vgmgroups;
 
 import org.spongepowered.api.text.Text;
 
-public class TextFactory {
+public class TextUtils {
     public static Text createNewLineText() {
         return Text.of("\n");
     }
