@@ -102,19 +102,23 @@ public class GroupManager {
         return groups.stream().filter(group -> group.isInGroup(player)).findFirst();
     }
 
-    public void saveGroups() throws IOException, ObjectMappingException {
+    public void saveGroups() {
         for (Group group : groups) saveGroup(group);
     }
 
-    private void saveGroup(Group group) throws IOException, ObjectMappingException {
-        File groupFile = getGroupFile(group);
-        groupFile.createNewFile();
+    public void saveGroup(Group group) {
+        try {
+            File groupFile = getGroupFile(group);
+            groupFile.createNewFile();
 
-        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
-        ConfigurationNode rootNode = loader.load();
+            HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setFile(groupFile).build();
+            ConfigurationNode rootNode = loader.load();
 
-        rootNode.setValue(TypeToken.of(Group.class), group);
-        loader.save(rootNode);
+            rootNode.setValue(TypeToken.of(Group.class), group);
+            loader.save(rootNode);
+        } catch (ObjectMappingException | IOException e) {
+            throw new RuntimeException("Failed to save group " + group.getName(), e);
+        }
     }
 
     public static GroupManager getInstance() {
@@ -135,11 +139,7 @@ public class GroupManager {
                 .build(context);
         if (Sponge.getEventManager().post(new GroupCreateEvent(player, group, cause))) return;
 
-        try {
-            saveGroup(group);
-        } catch (IOException | ObjectMappingException e) {
-            throw new RuntimeException("Failed to save group " + group.getName(), e);
-        }
+        saveGroup(group);
         groups.add(group);
     }
 
