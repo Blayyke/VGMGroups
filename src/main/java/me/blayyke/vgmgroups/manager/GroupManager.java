@@ -48,18 +48,18 @@ public class GroupManager {
     }
 
     public void loadGroups() throws IOException, ObjectMappingException {
-        System.out.println("Attempting to load groups from disk");
+        VGMGroups.getLogger().info("Attempting to load groups from disk");
         groups = new ArrayList<>();
 
         File[] files = DataManager.getInstance().getGroupsDir().listFiles();
         if (files == null) {
-            System.out.println("Groups dir has no children files, no groups exist.");
+            VGMGroups.getLogger().info("Groups dir has no children files, no groups exist.");
             return;
         }
 
         for (File file : files) {
             if (!Files.getFileExtension(file.getName()).equalsIgnoreCase(fileExtension)) {
-                System.out.println(String.format("File %s does not match extension %s skipping file.", file.getName(), fileExtension));
+                VGMGroups.getLogger().info(String.format("File %s does not match extension %s skipping file.", file.getName(), fileExtension));
                 continue;
             }
 
@@ -67,7 +67,7 @@ public class GroupManager {
             ConfigurationNode rootNode = loader.load();
 
             Group group = rootNode.getValue(TypeToken.of(Group.class));
-            if (group == null) System.out.println("GROUP IS NULL!");
+            if (group == null) VGMGroups.getLogger().error("GROUP IS NULL!");
             groups.add(group);
         }
     }
