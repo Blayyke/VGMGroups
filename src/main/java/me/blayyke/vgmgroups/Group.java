@@ -275,7 +275,28 @@ public class Group {
         claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
 
         GroupManager.getInstance().saveGroup(this);
+        VGMGroups.getLogger().info("Group %s claimed chunk %s.", getName(), getClaimString(location));
         return true;
+    }
+
+    private String getClaimString(Location<World> location) {
+        return "[x=" + location.getChunkPosition().getX() + ",y=" + location.getChunkPosition().getZ() + ",world=" + location.getExtent().getName() + "]";
+    }
+
+    public void unclaimChunk(Location<World> location) {
+        Iterator<GroupClaim> iterator = claims.iterator();
+        while (iterator.hasNext()) {
+            GroupClaim next = iterator.next();
+            Vector3i chunkPosition = location.getChunkPosition();
+            if (next.getChunkX() == chunkPosition.getX() && next.getChunkZ() == chunkPosition.getZ()) {
+                iterator.remove();
+                GroupManager.getInstance().saveGroup(this);
+                VGMGroups.getLogger().info("Group %s unclaimed chunk %s.", getName(), getClaimString(location));
+                return;
+            }
+        }
+        // This should be impossible if the chunk was checked properly
+        throw new RuntimeException("Didn't find chunk to unclaim?");
     }
 
     private boolean canClaimMore() {

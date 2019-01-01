@@ -33,14 +33,15 @@ public class CommandGroup extends CommandContainer {
                 new CommandChildGroupInvite(getPlugin()),
                 new CommandChildGroupJoin(getPlugin()),
                 new CommandChildGroupLeader(getPlugin()),
+                new CommandChildGroupLeave(getPlugin()),
                 new CommandChildGroupList(getPlugin()),
                 new CommandChildGroupName(getPlugin()),
                 new CommandChildGroupMap(getPlugin()),
                 new CommandChildGroupRank(getPlugin()),
-                new CommandChildGroupLeave(getPlugin()),
                 new CommandChildGroupRelationship(getPlugin()),
                 new CommandChildGroupHome(getPlugin()),
-                new CommandChildGroupSetHome(getPlugin())
+                new CommandChildGroupSetHome(getPlugin()),
+                new CommandChildGroupUnclaim(getPlugin())
         );
     }
 
