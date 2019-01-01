@@ -70,6 +70,8 @@ public class GroupManager {
             if (group == null) VGMGroups.getLogger().error("GROUP IS NULL!");
             groups.add(group);
         }
+
+        VGMGroups.getLogger().info("Loaded " + groups.size() + " groups from disk.");
     }
 
     public List<Group> getGroups() {
