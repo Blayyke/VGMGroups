@@ -74,6 +74,11 @@ public class CommandChildGroupRelationship extends ChildCommand {
             return CommandResult.empty();
         }
 
+        if (target.equals(group)) {
+            Texts.CANNOT_TARGET_SELF.send(player);
+            return CommandResult.empty();
+        }
+
         if (relationshipOpt.isPresent()) {
             //set new relationship
             Relationship relationship = Relationship.fromString(relationshipOpt.get());
@@ -88,11 +93,6 @@ public class CommandChildGroupRelationship extends ChildCommand {
             Texts.RELATIONSHIP_UPDATE.broadcastWithVars(group, target.getName(), relationship.getFriendlyName());
             Texts.RELATIONSHIP_UPDATE_RECEIVE.broadcastWithVars(target, group.getName(), relationship.getFriendlyName());
             return CommandResult.success();
-        }
-
-        if (target.equals(group)) {
-            Texts.CANNOT_TARGET_SELF.send(player);
-            return CommandResult.empty();
         }
 
         //view current one
