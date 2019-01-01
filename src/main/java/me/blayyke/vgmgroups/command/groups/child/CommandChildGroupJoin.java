@@ -40,6 +40,12 @@ public class CommandChildGroupJoin extends ChildCommand {
         Player player = playersOnly(src);
         Optional<String> nameOpt = args.getOne("name");
         String name = nameOpt.orElseThrow(() -> new CommandException(Text.of("Missing argument")));
+
+        if (GroupManager.getInstance().getPlayerGroup(player).isPresent()) {
+            Texts.ALREADY_IN_GROUP.send(player);
+            return CommandResult.empty();
+        }
+
         Optional<Group> groupOpt = GroupManager.getInstance().getGroupByName(name);
         if (groupOpt.isPresent()) {
             attemptJoinGroup(player, groupOpt.get());
