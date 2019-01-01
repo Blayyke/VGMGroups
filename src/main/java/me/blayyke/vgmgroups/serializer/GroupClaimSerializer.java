@@ -10,8 +10,8 @@ import java.util.UUID;
 public class GroupClaimSerializer extends XTypeSerializer<GroupClaim> {
     @Override
     public GroupClaim deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-        int x = value.getNode("x").getInt();
-        int z = value.getNode("z").getInt();
+        int x = value.getNode("X").getInt();
+        int z = value.getNode("Z").getInt();
         UUID worldUUID = value.getNode("World").getValue(TypeToken.of(UUID.class));
 
         return new GroupClaim(worldUUID, x, z);
@@ -19,8 +19,8 @@ public class GroupClaimSerializer extends XTypeSerializer<GroupClaim> {
 
     @Override
     public void serialize(TypeToken<?> type, GroupClaim location, ConfigurationNode value) throws ObjectMappingException {
-        value.getNode("x").setValue(location.getChunkX());
-        value.getNode("z").setValue(location.getChunkZ());
+        value.getNode("X").setValue(location.getChunkX());
+        value.getNode("Z").setValue(location.getChunkZ());
         value.getNode("World").setValue(TypeToken.of(UUID.class), location.getWorldUUID());
     }
 }
