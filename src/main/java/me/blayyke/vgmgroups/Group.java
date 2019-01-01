@@ -275,7 +275,7 @@ public class Group {
         claims.add(new GroupClaim(location.getExtent().getUniqueId(), chunkX, chunkZ));
 
         GroupManager.getInstance().saveGroup(this);
-        VGMGroups.getLogger().info("Group %s claimed chunk %s.", getName(), getClaimString(location));
+        VGMGroups.getLogger().info(String.format("Group %s claimed chunk %s.", getName(), getClaimString(location)));
         return true;
     }
 
@@ -291,7 +291,7 @@ public class Group {
             if (next.getChunkX() == chunkPosition.getX() && next.getChunkZ() == chunkPosition.getZ()) {
                 iterator.remove();
                 GroupManager.getInstance().saveGroup(this);
-                VGMGroups.getLogger().info("Group %s unclaimed chunk %s.", getName(), getClaimString(location));
+                VGMGroups.getLogger().info(String.format("Group %s unclaimed chunk %s.", getName(), getClaimString(location)));
                 return;
             }
         }
