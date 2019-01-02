@@ -25,7 +25,7 @@ public class CommandChildGroupUnclaim extends ChildCommand {
     @Nonnull
     @Override
     protected String getPermission() {
-        return "claim";
+        return "unclaim";
     }
 
     @Override
