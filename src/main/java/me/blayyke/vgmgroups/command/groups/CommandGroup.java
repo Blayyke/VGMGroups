@@ -41,7 +41,8 @@ public class CommandGroup extends CommandContainer {
                 new CommandChildGroupRelationship(getPlugin()),
                 new CommandChildGroupHome(getPlugin()),
                 new CommandChildGroupSetHome(getPlugin()),
-                new CommandChildGroupUnclaim(getPlugin())
+                new CommandChildGroupUnclaim(getPlugin()),
+                new CommandChildGroupUnclaimAlll(getPlugin())
         );
     }
 

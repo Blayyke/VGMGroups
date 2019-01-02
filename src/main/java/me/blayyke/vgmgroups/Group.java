@@ -328,4 +328,11 @@ public class Group {
     public int getMaxPower() {
         return memberUUIDs.size() * maxPowerPerPerson;
     }
+
+    public void unclaimAllChunks() {
+        claims.clear();
+        GroupManager.getInstance().saveGroup(this);
+
+        VGMGroups.getLogger().info(String.format("Group %s unclaimed all chunks.", getName()));
+    }
 }
